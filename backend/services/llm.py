@@ -8,17 +8,23 @@ class GeminiLLM:
     """A real LLM integration using Gemini 3 Flash Preview."""
 
     def __init__(self):
-        # Configure the genai client using the API key from settings
-        # The genai.Client() automatically picks up GEMINI_API_KEY from env, 
-        # but we can explicitly pass it if needed, or set os.environ.
         if settings.llm_api_key:
             os.environ["GEMINI_API_KEY"] = settings.llm_api_key
-        
-        try:
-            self.client = genai.Client()
-        except Exception as e:
-            print(f"Warning: Failed to initialize Gemini Client: {e}")
-            self.client = None
+        self._client = None
+
+    @property
+    def client(self):
+        # Lazy initialization to avoid global async loop issues in FastAPI
+        if self._client is None:
+            if not os.environ.get("GEMINI_API_KEY"):
+                print("Warning: Failed to initialize Gemini Client: No API key was provided.")
+                return None
+                
+            try:
+                self._client = genai.Client()
+            except Exception as e:
+                print(f"Warning: Failed to initialize Gemini Client: {e}")
+        return self._client
 
     def generate_response(self, message: str, language: str) -> str:
         """Generates a contextual response using Gemini or Objections KB."""
