@@ -19,5 +19,6 @@ async def chat_endpoint(request: ChatRequest):
         session_id=result["session_id"],
         response=result["response"],
         score=result["score"],
-        classification=result["classification"]
+        classification=result["classification"],
+        emotion=result.get("emotion", {})
     )

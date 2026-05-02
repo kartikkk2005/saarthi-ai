@@ -18,6 +18,9 @@ export default function ChatPage() {
   const [availableVoices, setAvailableVoices] = useState([]);
   const [showSettings, setShowSettings] = useState(false);
   
+  // Emotion Radar State
+  const [emotion, setEmotion] = useState({ scores: { excited: 10, curious: 10, skeptical: 10, frustrated: 10, neutral: 40 }, dominant: 'neutral' });
+  
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -142,6 +145,11 @@ export default function ChatPage() {
       setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
       setLeadStatus({ score: data.score, classification: data.classification });
       
+      // Update Emotion Radar
+      if (data.emotion && data.emotion.scores) {
+        setEmotion(data.emotion);
+      }
+      
       speakResponse(data.response);
       
     } catch (error) {
@@ -163,6 +171,15 @@ export default function ChatPage() {
       case 'Warm': return 'text-orange-500 bg-orange-500/10 border-orange-500/20';
       default: return 'text-blue-400 bg-blue-500/10 border-blue-500/20';
     }
+  };
+
+  // SVG Radar Chart helper: converts 5 values (0-100) to polygon points
+  const getRadarPoints = (values, cx, cy, maxR) => {
+    return values.map((val, i) => {
+      const angle = (Math.PI * 2 * i / values.length) - Math.PI / 2;
+      const r = (val / 100) * maxR;
+      return `${cx + r * Math.cos(angle)},${cy + r * Math.sin(angle)}`;
+    }).join(' ');
   };
 
   return (
@@ -251,8 +268,76 @@ export default function ChatPage() {
       </header>
 
       {/* Chat Area */}
-      <main className="flex-1 overflow-y-auto p-4 md:p-8 space-y-6 scroll-smooth">
-        <div className="max-w-4xl mx-auto space-y-6">
+      <main className="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth">
+        <div className="max-w-5xl mx-auto flex gap-6">
+        {/* Emotion Radar Sidebar */}
+        <div className="hidden lg:flex flex-col items-center w-48 shrink-0 sticky top-4 self-start">
+          <div className="glass-panel rounded-2xl border border-white/5 p-4 w-full">
+            <h3 className="text-[10px] uppercase tracking-wider text-gray-500 text-center mb-3 font-semibold">Emotion Radar</h3>
+            <svg viewBox="0 0 200 200" className="w-full">
+              {/* Pentagon Grid Lines */}
+              {[1, 0.66, 0.33].map((scale, si) => (
+                <polygon key={si} points={getRadarPoints(Array(5).fill(scale * 100), 100, 100, 70)} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+              ))}
+              {/* Axis Lines */}
+              {[0,1,2,3,4].map(i => {
+                const angle = (Math.PI * 2 * i / 5) - Math.PI / 2;
+                const x = 100 + 70 * Math.cos(angle);
+                const y = 100 + 70 * Math.sin(angle);
+                return <line key={i} x1="100" y1="100" x2={x} y2={y} stroke="rgba(255,255,255,0.06)" strokeWidth="1" />;
+              })}
+              {/* Data Polygon */}
+              <polygon
+                points={getRadarPoints([
+                  emotion.scores.excited,
+                  emotion.scores.curious,
+                  emotion.scores.neutral,
+                  emotion.scores.skeptical,
+                  emotion.scores.frustrated
+                ], 100, 100, 70)}
+                fill="rgba(16,185,129,0.15)"
+                stroke="#10b981"
+                strokeWidth="2"
+                className="transition-all duration-700"
+              />
+              {/* Data Points */}
+              {[
+                { val: emotion.scores.excited, label: 'Excited' },
+                { val: emotion.scores.curious, label: 'Curious' },
+                { val: emotion.scores.neutral, label: 'Neutral' },
+                { val: emotion.scores.skeptical, label: 'Skeptical' },
+                { val: emotion.scores.frustrated, label: 'Frustrated' }
+              ].map((item, i) => {
+                const angle = (Math.PI * 2 * i / 5) - Math.PI / 2;
+                const r = (item.val / 100) * 70;
+                const px = 100 + r * Math.cos(angle);
+                const py = 100 + r * Math.sin(angle);
+                const lx = 100 + 85 * Math.cos(angle);
+                const ly = 100 + 85 * Math.sin(angle);
+                return (
+                  <g key={i}>
+                    <circle cx={px} cy={py} r="3" fill="#10b981" className="transition-all duration-700" />
+                    <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" fill="#9ca3af" fontSize="8" fontWeight="500">{item.label}</text>
+                  </g>
+                );
+              })}
+            </svg>
+            <div className="text-center mt-2">
+              <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
+                emotion.dominant === 'excited' ? 'bg-green-500/20 text-green-400' :
+                emotion.dominant === 'curious' ? 'bg-blue-500/20 text-blue-400' :
+                emotion.dominant === 'skeptical' ? 'bg-yellow-500/20 text-yellow-400' :
+                emotion.dominant === 'frustrated' ? 'bg-red-500/20 text-red-400' :
+                'bg-gray-500/20 text-gray-400'
+              }`}>
+                {emotion.dominant.charAt(0).toUpperCase() + emotion.dominant.slice(1)}
+              </span>
+            </div>
+          </div>
+        </div>
+
+        {/* Chat Messages */}
+        <div className="flex-1 space-y-6">
           {messages.map((msg, i) => (
             <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slide-up`}>
               <div className={`max-w-[80%] md:max-w-[70%] p-4 rounded-2xl ${
@@ -274,6 +359,7 @@ export default function ChatPage() {
             </div>
           )}
           <div ref={messagesEndRef} />
+        </div>
         </div>
       </main>
 

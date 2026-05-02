@@ -3,6 +3,7 @@ from services.language import detect_language
 from services.lead_scorer import lead_scorer
 from services.llm import mock_llm
 from services.session_store import session_store
+from services.emotion import emotion_detector
 
 class ConversationService:
     """Orchestrates the chat logic."""
@@ -13,8 +14,9 @@ class ConversationService:
         1. Retrieves or creates session
         2. Detects language
         3. Updates lead score
-        4. Generates response
-        5. Saves to DB
+        4. Detects emotion
+        5. Generates response (tone-adapted)
+        6. Saves to DB
         """
         # 1. Get or Create Session
         if not session_id:
@@ -42,7 +44,10 @@ class ConversationService:
         # Update Session with new score
         await session_store.update_lead_status(session_id, new_score, classification, lang)
         
-        # 4. Generate AI Response
+        # 4. Detect Emotion
+        emotion_result = emotion_detector.analyze(message)
+        
+        # 5. Generate AI Response
         ai_response = mock_llm.generate_response(message, lang)
         
         # Save AI response to DB
@@ -53,7 +58,8 @@ class ConversationService:
             "response": ai_response,
             "score": new_score,
             "classification": classification,
-            "language": lang
+            "language": lang,
+            "emotion": emotion_result
         }
 
 conversation_service = ConversationService()
