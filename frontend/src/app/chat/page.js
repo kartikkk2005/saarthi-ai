@@ -20,17 +20,43 @@ export default function ChatPage() {
     scrollToBottom();
   }, [messages]);
 
+  // Pre-load voices to avoid the Chrome bug where getVoices() is empty on the first call
+  useEffect(() => {
+    if (typeof window !== 'undefined' && 'speechSynthesis' in window) {
+      window.speechSynthesis.getVoices();
+      window.speechSynthesis.onvoiceschanged = () => {
+        window.speechSynthesis.getVoices();
+      };
+    }
+  }, []);
+
   // Handle Speech Synthesis (TTS)
   const speakResponse = (text) => {
     if ('speechSynthesis' in window) {
       // Cancel any ongoing speech
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
-      // Try to find a Hindi voice, otherwise use default
+      
+      // Get all available voices
       const voices = window.speechSynthesis.getVoices();
-      const hindiVoice = voices.find(v => v.lang.includes('hi') || v.lang.includes('IN'));
-      if (hindiVoice) utterance.voice = hindiVoice;
-      utterance.rate = 1.0;
+      
+      // Algorithm to find the most natural, human-like voice available
+      // 1. Prioritize high-quality "Google" cloud voices with an Indian accent (hi-IN or en-IN)
+      let bestVoice = voices.find(v => (v.lang.includes('hi') || v.lang.includes('IN')) && v.name.includes('Google'));
+      
+      // 2. Fallback: Any premium "Google" English voice (usually UK Female or US Female sound great)
+      if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('UK'));
+      if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Google') && v.lang.startsWith('en'));
+      
+      // 3. Fallback: Any Indian/Hindi voice provided by the OS
+      if (!bestVoice) bestVoice = voices.find(v => v.lang.includes('hi') || v.lang.includes('IN'));
+      
+      if (bestVoice) utterance.voice = bestVoice;
+      
+      // Adjusting rate and pitch makes it sound significantly less robotic
+      utterance.rate = 0.95; // Slightly slower pacing sounds more thoughtful
+      utterance.pitch = 1.05; // Very slight pitch increase adds warmth
+      
       window.speechSynthesis.speak(utterance);
     }
   };
@@ -69,6 +95,12 @@ export default function ChatPage() {
     recognition.onerror = (event) => {
       console.error("Speech recognition error", event.error);
       setIsListening(false);
+      
+      if (event.error === 'network') {
+        alert("Microphone Error: Please ensure you are connected to the internet. If you are accessing this app via an IP address (like 192.168.x.x), Chrome blocks the microphone. Please open http://localhost:3000 instead.");
+      } else if (event.error === 'not-allowed' || event.error === 'denied') {
+        alert("Microphone access was denied. Please allow microphone permissions in your browser to use the Voice Agent.");
+      }
     };
 
     recognition.onend = () => {

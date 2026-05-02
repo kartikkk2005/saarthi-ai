@@ -1,132 +1,71 @@
 # 🧠 Saarthi.AI – Multilingual Partner Acquisition Engine
 
 ## 📌 Overview
+Saarthi.AI is an **AI Voice & Chat Agent** built to revolutionize how Rupeezy onboards Authorized Persons (APs). 
 
-Saarthi.AI is an idea we developed to improve how Rupeezy onboards Authorized Persons (APs).
-
-Right now, the process depends heavily on Relationship Managers (RMs), which creates delays and missed opportunities. Our goal is to introduce an AI-based system that can handle early-stage conversations with leads in a faster and more scalable way.
-
----
-
-## 🚨 What’s the Problem?
-
-From our understanding, the current system has a few clear issues:
-
-* ⏱️ **Delayed Responses**
-  Leads often come in outside working hours, and by the time someone follows up, the interest is already gone.
-
-* 🌐 **Language Gap**
-  Many potential partners are more comfortable in their native language, but communication is mostly limited.
-
-* 📉 **Limited Capacity**
-  Since RMs can only handle one person at a time, scaling becomes difficult during campaigns.
+Today, only 18% of leads convert because human Relationship Managers (RMs) face bottlenecks with time, language barriers, and queue capacity. Saarthi.AI solves this structural failure by contacting leads instantly, pitching the Rupeezy AP program in their native language (Hindi, Hinglish, or English), dynamically handling objections, and qualifying leads so RMs only focus on closing the hottest prospects.
 
 ---
 
-## 💡 Our Approach
+## 🏆 Hackathon Implementation (What We Built)
+We successfully built a production-ready prototype that executes the entire partner acquisition funnel. 
 
-Instead of replacing RMs, Saarthi.AI is designed to support them.
+### 1. 🎙️ Live Multilingual Voice Agent
+* **Web Speech API**: Users can click "Hold to Speak" to talk to the AI naturally.
+* **Text-to-Speech (TTS)**: The AI responds intelligently via Gemini and speaks its response back to the user aloud using natural voice synthesis.
+* **Language Agnostic**: Heuristics dynamically detect whether the user is speaking pure Hindi, urban Hinglish, or formal English, and forces the AI to reply in the exact same language and tone.
 
-It works as a **first point of contact** that:
+### 2. 🧠 Objection Handling Knowledge Base
+* **Deterministic Fallbacks**: We built an independent `objections.json` Knowledge Base. When a user raises one of the Top 5 objections (e.g. *"I already have a broker"*), the system intercepts it and delivers the exact, compliant Rupeezy rebuttal before allowing the generative AI to continue the conversation naturally.
 
-* responds instantly,
-* talks in the user’s preferred language,
-* filters serious leads,
-* and passes only strong prospects to RMs.
+### 3. 🎯 Dynamic Lead Qualification Engine
+* **Real-time Scoring**: Our `LeadScorer` constantly evaluates user intent. It adds points for positive sentiment ("how much commission?") and deducts points for negative sentiment ("I am busy").
+* **Classification**: Leads are instantly classified into **Hot, Warm, or Cold** pipelines.
 
-This allows RMs to focus more on closing rather than initial screening.
-
----
-
-## 🔑 Key Ideas Behind the System
-
-### 🗣️ Multilingual Conversations
-
-The system is designed to handle:
-
-* Hindi, English, Hinglish, and regional languages
-* Mixed-language inputs (like “mera broker better hai”)
-* Replies in a similar language style as the user
+### 4. 📊 Analytics & Routing Dashboard
+* **Funnel Analytics**: A real-time dashboard tracks the total leads contacted and categorizes them by their status.
+* **Generative Post-Call Summaries**: RMs can click a button to generate an instant AI summary of the call. Gemini analyzes the entire MongoDB transcript and outputs exactly what the RM needs: *Objections Raised, Topics Covered, and Recommended Action*.
+* **WhatsApp Simulation**: Clicking "Simulate Routing" calculates the CRM payload and simulates sending an automated WhatsApp Nurture link to Warm leads.
 
 ---
 
-### 🧠 Handling Objections
-
-Instead of fixed scripts, the idea is to:
-
-* understand what the user is saying,
-* refer to predefined knowledge,
-* and respond based on context.
-
----
-
-### 📊 Lead Qualification
-
-Each interaction contributes to a simple scoring system:
-
-* 🔥 **Hot** → very interested, ready for RM
-* 🌤️ **Warm** → interested but not fully convinced
-* ❄️ **Cold** → low intent or not relevant
+## 🏗️ Technical Stack
+* **AI Engine**: Google Gemini `gemini-3-flash-preview` via `google-genai` SDK
+* **Backend**: FastAPI + Python
+* **Database**: MongoDB (motor async driver) for Multi-Turn Session Memory
+* **Frontend**: Next.js 16 (Turbopack) + TailwindCSS Glassmorphism UI
+* **Orchestration**: `concurrently` (Runs both servers with a single command)
 
 ---
 
-### 🔁 Conversation Memory
+## 🚀 How to Run Locally
 
-If a user drops off and comes back later,
-the system should ideally continue from where it left off instead of starting over.
+### 1. Requirements
+* Node.js (v18+)
+* Python 3.10+
+* MongoDB running locally on `mongodb://localhost:27017`
 
----
+### 2. Setup
+1. Clone the repository.
+2. In the `backend/` folder, create a `.env` file and add your Gemini API key:
+   ```ini
+   LLM_API_KEY=your_gemini_api_key_here
+   ```
+3. Run `npm install` in the root folder.
+4. Run `npm install` in the `frontend/` folder.
+5. Create a Python virtual environment in `backend/venv` and install `backend/requirements.txt`.
 
-### 📲 Lead Routing
-
-* Hot leads → sent directly to RM
-* Warm leads → followed up through WhatsApp
-
----
-
-## 🏗️ How We Imagine the System (Conceptual)
-
-We are not implementing this fully yet, but the idea is:
-
-* **Backend**: FastAPI (for handling requests asynchronously)
-* **Frontend**: Simple dashboard (Next.js)
-* **Database**: MongoDB
-* **AI Components**:
-
-  * Speech-to-Text → Whisper / Bhashini
-  * Language Model → GPT-based
-  * Text-to-Speech → ElevenLabs
-
----
-
-## ⚠️ Challenges We Noticed
-
-While thinking through this system, a few practical issues came up:
-
-* Real-time voice delay can break the experience
-* Users may interrupt while AI is speaking
-* AI might generate incorrect or misleading responses
-
----
-
-## 👥 Team Collaboration
-
-This repository is maintained as a team project.
-
-We are using a simple workflow:
-
-* work on separate branches
-* create pull requests
-* review before merging
-
----
-
-## 📜 License
-
-MIT License
+### 3. Start the Engine
+From the root directory, simply run:
+```bash
+npm run dev
+```
+* **Frontend**: `http://localhost:3000` (Use Google Chrome for the best Voice API experience)
+* **Backend**: `http://localhost:8080`
 
 ---
 
 ## ✍️ Contributors
-
 * Kartik D Chendekar | Abhilash Tiwari | Kaushal Prakash
+
+*Built with ❤️ for the Rupeezy Hackathon.*
