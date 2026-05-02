@@ -1,0 +1,53 @@
+{
+  "already_have_broker": {
+    "keywords": ["already", "broker", "hai mera", "dusra", "pehle se", "existing"],
+    "responses": {
+      "en": [
+        "I understand you already have a broker. Rupeezy offers higher brokerage sharing and advanced trading tools. Would you like to compare?",
+        "Many of our partners moved from other brokers for our superior tech and better revenue share. Can I share some details?"
+      ],
+      "hi-en": [
+        "Aapka already broker hai, samajh sakta hoon. Par Rupeezy mein brokerage sharing zyada milti hai aur tech tools better hain. Compare karke dekhein?",
+        "Humare kai partners ne dusre brokers se switch kiya kyunki hamara revenue share better hai. Kya main details share karu?"
+      ],
+      "hi": [
+        "मैं समझता हूँ कि आपका पहले से एक ब्रोकर है। लेकिन रुपीज़ी में आपको बेहतर ब्रोकरेज शेयरिंग मिलेगी। क्या आप तुलना करना चाहेंगे?",
+        "हमारे कई पार्टनर्स ने बेहतर रेवेन्यू शेयर के लिए हमारे साथ शुरुआत की है। क्या मैं जानकारी साझा करूँ?"
+      ]
+    }
+  },
+  "low_commission": {
+    "keywords": ["commission", "paisa", "kam", "profit", "low", "share"],
+    "responses": {
+      "en": [
+        "Rupeezy actually offers one of the most competitive revenue sharing models in the market, going up to 70% based on your volume. Should I send the slab details?",
+        "Our partners earn significantly more because of our high volume clients and transparent payout structures. Want to see an earnings estimate?"
+      ],
+      "hi-en": [
+        "Rupeezy market mein sabse competitive revenue share deta hai, jo volume ke hisaab se 70% tak jaata hai. Kya main slabs bheju?",
+        "Hamare partners ki earning kaafi achi hoti hai transparent payouts ki wajah se. Ek estimate dekhna chahenge?"
+      ],
+      "hi": [
+        "रुपीज़ी बाज़ार में सबसे प्रतिस्पर्धी रेवेन्यू शेयर देता है, जो आपके वॉल्यूम के आधार पर 70% तक जाता है। क्या मैं स्लैब का विवरण भेजूँ?",
+        "पारदर्शी भुगतान संरचनाओं के कारण हमारे भागीदार काफी अधिक कमाते हैं। क्या आप अनुमान देखना चाहेंगे?"
+      ]
+    }
+  },
+  "no_time": {
+    "keywords": ["time", "busy", "waqt", "samay", "fursat", "bad mein", "later"],
+    "responses": {
+      "en": [
+        "I completely understand you're busy! Our partner dashboard is fully automated so it takes zero time to manage clients. Can we schedule a 5-minute call later?",
+        "No worries! Since everything is digital, it requires very little of your time. Let me know when you're free for a quick chat."
+      ],
+      "hi-en": [
+        "Samajh sakta hoon aap busy hain! Hamara dashboard fully automated hai toh clients manage karne mein time nahi lagta. Baad mein 5 minute baat karein?",
+        "Koi baat nahi! Sab kuch digital hone ki wajah se bahut kam time lagta hai. Jab free ho tab batayega."
+      ],
+      "hi": [
+        "मैं समझता हूँ कि आप व्यस्त हैं! हमारा पार्टनर डैशबोर्ड पूरी तरह से स्वचालित है, इसलिए इसमें कोई समय नहीं लगता। क्या हम बाद में 5 मिनट बात कर सकते हैं?",
+        "कोई बात नहीं! चूंकि सब कुछ डिजिटल है, इसमें आपका बहुत कम समय लगता है। जब आप स्वतंत्र हों तो बताएं।"
+      ]
+    }
+  }
+}
