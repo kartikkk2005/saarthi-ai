@@ -1,0 +1,26 @@
+{
+  "name": "sarti-ai-hacakethon",
+  "version": "1.0.0",
+  "description": "Saarthi.AI is an idea we developed to improve how Rupeezy onboards Authorized Persons (APs).",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run backend\" \"npm run frontend\"",
+    "frontend": "cd frontend && npm run dev",
+    "backend": "cd backend && .\\venv\\Scripts\\python.exe -m uvicorn main:app --host 0.0.0.0 --port 8000 --reload"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/kartikkk2005/saarthi-ai.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "type": "commonjs",
+  "bugs": {
+    "url": "https://github.com/kartikkk2005/saarthi-ai/issues"
+  },
+  "homepage": "https://github.com/kartikkk2005/saarthi-ai#readme",
+  "devDependencies": {
+    "concurrently": "^9.2.1"
+  }
+}
