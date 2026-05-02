@@ -2,6 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
+import { FiStar } from 'react-icons/fi';
 
 export default function DashboardPage() {
   const [leads, setLeads] = useState([]);
@@ -187,7 +188,7 @@ export default function DashboardPage() {
                   {summaryResult && (
                     <div className="mb-6 p-4 glass-panel border border-secondary-500/30 rounded-xl animate-slide-up">
                       <h3 className="text-secondary-400 font-bold mb-3 flex items-center gap-2">
-                        ✨ AI Post-Call Summary
+                        <FiStar className="text-secondary-500" /> AI Post-Call Summary
                       </h3>
                       <div className="grid grid-cols-2 gap-4 text-sm">
                         <div className="col-span-2">

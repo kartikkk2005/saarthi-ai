@@ -1,4 +1,5 @@
 import Link from 'next/link';
+import { FiGlobe, FiZap, FiGitMerge } from 'react-icons/fi';
 
 export default function Home() {
   return (
@@ -54,17 +55,17 @@ export default function Home() {
             {
               title: "Multilingual Intelligence",
               desc: "Native support for English, Hindi, and Hinglish. Automatically detects language and responds in the exact same tone.",
-              icon: "🌐"
+              icon: <FiGlobe className="text-secondary-500" />
             },
             {
               title: "Real-Time Lead Scoring",
               desc: "Analyzes conversational intent dynamically. Classifies prospects as Hot, Warm, or Cold based on positive and negative signals.",
-              icon: "⚡"
+              icon: <FiZap className="text-primary-500" />
             },
             {
               title: "Automated Routing",
               desc: "Routes high-intent Hot leads directly to RMs, while queuing Warm leads into personalized WhatsApp nurture flows.",
-              icon: "🔄"
+              icon: <FiGitMerge className="text-orange-500" />
             }
           ].map((feature, i) => (
             <div key={i} className="glass-panel p-6 rounded-2xl hover:bg-white/[0.04] transition-colors border border-white/5">
