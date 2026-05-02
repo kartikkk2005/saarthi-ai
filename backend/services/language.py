@@ -2,8 +2,11 @@ import re
 
 def detect_language(text: str) -> str:
     """
-    Very basic heuristic language detection for the demo.
-    Returns: 'hi' (Hindi script), 'hi-en' (Hinglish), or 'en' (English)
+    Language detection module (Phase 3).
+    Returns: 
+        - 'hi': Hindi (detects Devanagari script)
+        - 'hi-en': Hinglish (detects romanized Hindi keywords)
+        - 'en': English (fallback default)
     """
     text = text.lower()
     
