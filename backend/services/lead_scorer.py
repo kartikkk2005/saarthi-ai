@@ -1,5 +1,9 @@
 class LeadScorer:
-    """Evaluates lead intent and assigns a score based on keywords."""
+    """
+    Lead Qualification Engine (Phase 4).
+    Evaluates lead intent and assigns a score based on keywords.
+    Automatically classifies leads into Hot, Warm, or Cold based on their accumulated score.
+    """
 
     def __init__(self):
         self.interest_signals = ['interested', 'yes', 'tell me more', 'how', 'join', 'commission', 'partner', 'haan', 'batao', 'accha']
