@@ -38,3 +38,24 @@ async def route_lead(session_id: str):
         
     routing_result = lead_router.simulate_routing(session)
     return routing_result
+
+@router.post("/leads/{session_id}/summary")
+async def generate_summary(session_id: str):
+    """Generates an AI post-call summary using the chat transcript."""
+    from services.llm import mock_llm
+    import json
+    
+    session = await session_store.get_session(session_id)
+    if not session:
+        raise HTTPException(status_code=404, detail="Session not found")
+        
+    messages = session.get("messages", [])
+    if not messages:
+        return {"error": "No transcript available to summarize"}
+        
+    summary_text = mock_llm.summarize_transcript(messages)
+    try:
+        return json.loads(summary_text)
+    except Exception as e:
+        # Fallback if Gemini didn't return perfect JSON
+        return {"action": summary_text, "objections": [], "topics": [], "duration_turns": len(messages)}

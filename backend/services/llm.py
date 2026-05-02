@@ -57,6 +57,37 @@ class GeminiLLM:
             print(f"Gemini API Error: {e}")
             return "Sorry, I am having trouble connecting to my brain right now."
 
+    def summarize_transcript(self, messages: list) -> str:
+        """Generates a structured post-call summary of a chat transcript."""
+        if not self.client:
+            return "{\"objections\": [\"N/A\"], \"topics\": [\"API Misconfigured\"], \"action\": \"Check API Key\"}"
+            
+        transcript = "\n".join([f"{m['role'].upper()}: {m['content']}" for m in messages])
+        
+        system_prompt = """
+        You are an AI analyst reviewing a sales call transcript for Rupeezy.
+        Analyze the conversation and return ONLY a JSON object with this exact structure (no markdown fences):
+        {
+          "duration_turns": <number of messages>,
+          "objections": ["list", "of", "objections", "raised by user"],
+          "topics": ["list", "of", "topics", "discussed"],
+          "action": "1 sentence recommended next action for the RM based on the user's sentiment"
+        }
+        """
+        
+        try:
+            response = self.client.models.generate_content(
+                model="gemini-3-flash-preview",
+                contents=[system_prompt, transcript],
+                config=types.GenerateContentConfig(
+                    response_mime_type="application/json"
+                )
+            )
+            return response.text.strip()
+        except Exception as e:
+            print(f"Summary Error: {e}")
+            return "{\"objections\": [\"Error generating summary\"], \"topics\": [\"Error\"], \"action\": \"Review manually\"}"
+
 # Export as mock_llm to avoid breaking imports in conversation.py, 
 # even though it's now a real LLM.
 mock_llm = GeminiLLM()

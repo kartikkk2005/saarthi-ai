@@ -9,6 +9,7 @@ export default function ChatPage() {
   const [sessionId, setSessionId] = useState(null);
   const [leadStatus, setLeadStatus] = useState({ score: 0, classification: 'Cold' });
   const [isLoading, setIsLoading] = useState(false);
+  const [isListening, setIsListening] = useState(false);
   const messagesEndRef = useRef(null);
 
   const scrollToBottom = () => {
@@ -19,20 +20,76 @@ export default function ChatPage() {
     scrollToBottom();
   }, [messages]);
 
-  const handleSend = async (e) => {
-    e.preventDefault();
-    if (!input.trim()) return;
+  // Handle Speech Synthesis (TTS)
+  const speakResponse = (text) => {
+    if ('speechSynthesis' in window) {
+      // Cancel any ongoing speech
+      window.speechSynthesis.cancel();
+      const utterance = new SpeechSynthesisUtterance(text);
+      // Try to find a Hindi voice, otherwise use default
+      const voices = window.speechSynthesis.getVoices();
+      const hindiVoice = voices.find(v => v.lang.includes('hi') || v.lang.includes('IN'));
+      if (hindiVoice) utterance.voice = hindiVoice;
+      utterance.rate = 1.0;
+      window.speechSynthesis.speak(utterance);
+    }
+  };
 
-    const userMessage = input.trim();
+  // Handle Speech Recognition (STT)
+  const toggleListening = () => {
+    if (isListening) {
+      setIsListening(false);
+      return;
+    }
+
+    const SpeechRecognition = window.SpeechRecognition || window.webkitSpeechRecognition;
+    if (!SpeechRecognition) {
+      alert("Your browser does not support Voice Recognition. Please try Chrome.");
+      return;
+    }
+
+    const recognition = new SpeechRecognition();
+    recognition.lang = 'en-IN'; // Can pick up Hindi and English mixed well
+    recognition.interimResults = false;
+    recognition.maxAlternatives = 1;
+
+    recognition.onstart = () => {
+      setIsListening(true);
+    };
+
+    recognition.onresult = (event) => {
+      const transcript = event.results[0][0].transcript;
+      setInput(transcript);
+      // Automatically send the message after a brief delay
+      setTimeout(() => {
+        handleSendEvent(transcript);
+      }, 500);
+    };
+
+    recognition.onerror = (event) => {
+      console.error("Speech recognition error", event.error);
+      setIsListening(false);
+    };
+
+    recognition.onend = () => {
+      setIsListening(false);
+    };
+
+    recognition.start();
+  };
+
+  const handleSendEvent = async (messageText) => {
+    if (!messageText.trim()) return;
+
     setInput('');
-    setMessages(prev => [...prev, { role: 'user', content: userMessage }]);
+    setMessages(prev => [...prev, { role: 'user', content: messageText }]);
     setIsLoading(true);
 
     try {
       const response = await fetch('http://localhost:8080/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: userMessage, session_id: sessionId }),
+        body: JSON.stringify({ message: messageText, session_id: sessionId }),
       });
 
       if (!response.ok) throw new Error('API Error');
@@ -44,12 +101,20 @@ export default function ChatPage() {
       setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
       setLeadStatus({ score: data.score, classification: data.classification });
       
+      // Speak the response aloud
+      speakResponse(data.response);
+      
     } catch (error) {
       console.error(error);
       setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, the AI engine is currently unavailable. Please ensure the backend is running.' }]);
     } finally {
       setIsLoading(false);
     }
+  };
+
+  const handleSend = (e) => {
+    e.preventDefault();
+    handleSendEvent(input);
   };
 
   const getStatusColor = (classification) => {
@@ -109,27 +174,43 @@ export default function ChatPage() {
       {/* Input Area */}
       <footer className="p-4 glass-panel border-t border-white/5">
         <div className="max-w-4xl mx-auto relative">
-          <form onSubmit={handleSend} className="relative flex items-center">
-            <input
-              type="text"
-              value={input}
-              onChange={(e) => setInput(e.target.value)}
-              placeholder="Type your message in English, Hindi, or Hinglish..."
-              className="w-full bg-gray-900/50 border border-white/10 rounded-full pl-6 pr-14 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all"
-              disabled={isLoading}
-            />
-            <button 
-              type="submit"
-              disabled={isLoading || !input.trim()}
-              className="absolute right-2 bg-primary-600 hover:bg-primary-500 disabled:bg-gray-700 disabled:opacity-50 text-white p-2.5 rounded-full transition-colors flex items-center justify-center"
+          <form onSubmit={handleSend} className="relative flex items-center gap-2">
+            <button
+              type="button"
+              onClick={toggleListening}
+              className={`p-4 rounded-full transition-all flex items-center justify-center ${
+                isListening 
+                  ? 'bg-red-500 text-white animate-pulse shadow-[0_0_20px_rgba(239,68,68,0.5)]' 
+                  : 'glass-panel text-gray-400 hover:text-white border border-white/10 hover:border-white/20'
+              }`}
+              title="Voice Input"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                <path d="M3.478 2.404a.75.75 0 00-.926.941l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.404z" />
+              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
+                <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
               </svg>
             </button>
+            <div className="relative flex-1 flex items-center">
+              <input
+                type="text"
+                value={input}
+                onChange={(e) => setInput(e.target.value)}
+                placeholder={isListening ? "Listening..." : "Type your message in English, Hindi, or Hinglish..."}
+                className="w-full bg-gray-900/50 border border-white/10 rounded-full pl-6 pr-14 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all"
+                disabled={isLoading}
+              />
+              <button 
+                type="submit"
+                disabled={isLoading || !input.trim()}
+                className="absolute right-2 bg-primary-600 hover:bg-primary-500 disabled:bg-gray-700 disabled:opacity-50 text-white p-2.5 rounded-full transition-colors flex items-center justify-center"
+              >
+                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
+                  <path d="M3.478 2.404a.75.75 0 00-.926.941l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.404z" />
+                </svg>
+              </button>
+            </div>
           </form>
           <div className="text-center mt-2 text-[10px] text-gray-500">
-            Powered by Saarthi.AI NLP Engine.
+            Powered by Saarthi.AI Voice & NLP Engine.
           </div>
         </div>
       </footer>
