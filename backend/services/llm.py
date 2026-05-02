@@ -54,8 +54,26 @@ class GeminiLLM:
             )
             return response.text.strip()
         except Exception as e:
-            print(f"Gemini API Error: {e}")
-            return "Sorry, I am having trouble connecting to my brain right now."
+            error_str = str(e)
+            # Auto-retry on rate limit (429)
+            if "429" in error_str or "RESOURCE_EXHAUSTED" in error_str:
+                import time, re
+                # Extract retry delay from error message if available
+                delay_match = re.search(r'retryDelay.*?(\d+)', error_str)
+                wait_time = int(delay_match.group(1)) if delay_match else 30
+                print(f"Rate limited. Retrying in {wait_time}s...")
+                time.sleep(wait_time)
+                try:
+                    response = self.client.models.generate_content(
+                        model="gemini-3-flash-preview",
+                        contents=[system_prompt, f"User: {message}"]
+                    )
+                    return response.text.strip()
+                except Exception as retry_err:
+                    print(f"Retry also failed: {retry_err}")
+            else:
+                print(f"Gemini API Error: {e}")
+            return "I'm currently experiencing high demand. Please try again in a few seconds."
 
     def summarize_transcript(self, messages: list) -> str:
         """Generates a structured post-call summary of a chat transcript."""
