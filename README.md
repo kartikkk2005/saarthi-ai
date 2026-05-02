@@ -25,7 +25,17 @@ We successfully built a production-ready prototype that executes the entire part
 ### 4. 📊 Analytics & Routing Dashboard
 * **Funnel Analytics**: A real-time dashboard tracks the total leads contacted and categorizes them by their status.
 * **Generative Post-Call Summaries**: RMs can click a button to generate an instant AI summary of the call. Gemini analyzes the entire MongoDB transcript and outputs exactly what the RM needs: *Objections Raised, Topics Covered, and Recommended Action*.
+* **Export to CRM**: One-click export of the full lead report (summary + transcript) as a downloadable `.txt` file for CRM integration.
+* **Sentiment Badges**: Each user message in the transcript is automatically tagged with "High Intent" or "Objection" badges based on NLP keyword analysis.
 * **WhatsApp Simulation**: Clicking "Simulate Routing" calculates the CRM payload and simulates sending an automated WhatsApp Nurture link to Warm leads.
+
+### 5. 🎭 Live Emotion Radar (Unique Feature)
+* **5-Axis Emotional Detection**: Every user message is analyzed across 5 emotional dimensions: Excited, Curious, Skeptical, Frustrated, and Neutral.
+* **Real-Time SVG Radar Chart**: A live pentagon chart on the chat sidebar morphs and animates as the user's emotional state changes turn-by-turn.
+* **Tone Adaptation**: The dominant detected emotion can instruct the AI to adjust its conversational style (e.g., soften tone when frustration is detected).
+
+### 6. 🎙️ Voice Visualizer
+* **Animated Waveform**: When the user activates the microphone, a dynamic CSS waveform animation appears, providing visual feedback that the AI is listening — similar to Siri or Google Assistant.
 
 ---
 

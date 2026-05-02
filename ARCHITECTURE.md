@@ -75,34 +75,77 @@ In financial services, AI hallucinations are a critical liability. We built a ro
 The `/dashboard` route is the command center for Relationship Managers (RMs):
 * **Funnel Analytics**: Live calculation of Total Contacted, Hot, Warm, and Cold leads.
 * **Generative Summaries**: Instead of forcing RMs to read 50-message transcripts, a click sends the entire transcript to Gemini to extract: *Recommended Action, Topics Covered, and Objections Raised*.
+* **Export to CRM**: Downloads a structured `.txt` report (session metadata + AI summary + full transcript) for CRM ingestion.
+* **Sentiment Badges**: Each user message is scanned and tagged with a colored "High Intent" or "Objection" badge, so RMs can skim transcripts instantly.
 * **Routing Simulator**: Evaluates the `score` and simulates sending an API payload to the CRM (e.g., dropping Warm leads into a WhatsApp nurture sequence).
 
 ---
 
-## 5. Folder Structure
+## 5. Live Emotion Radar (Unique Differentiator)
+This is the feature no other team has. Every user message is analyzed by `services/emotion.py` across **5 emotional axes**:
+
+| Axis | Triggers | Effect |
+|------|----------|--------|
+| Excited | "yes", "join", "interested", "bahut accha" | AI becomes upbeat, moves towards closing |
+| Curious | "how", "what", "kitna", "?" | AI becomes informative, gives clear facts |
+| Skeptical | "but", "really", "compare", "zerodha" | AI becomes empathetic, provides proof |
+| Frustrated | "no", "stop", "busy", "bakwas" | AI softens tone, stops pushing |
+| Neutral | (baseline) | AI stays warm and professional |
+
+The frontend renders this as a **live SVG pentagon radar chart** that smoothly animates with CSS transitions (`duration-700ms`) as the polygon shape morphs with each new message.
+
+```mermaid
+graph LR
+    UserMsg["User Message"] --> EmotionDetector["services/emotion.py"]
+    EmotionDetector --> Scores["{ excited: 45, curious: 80, skeptical: 15, frustrated: 5, neutral: 10 }"]
+    Scores --> RadarChart["SVG Pentagon\n(Chat Sidebar)"]
+    Scores --> ToneAdapter["LLM Tone Instruction"]
+```
+
+---
+
+## 6. API Reference
+
+| Method | Endpoint | Description | Returns |
+|--------|----------|-------------|---------|
+| `POST` | `/chat` | Send a user message, get AI response | `session_id`, `response`, `score`, `classification`, `emotion` |
+| `GET` | `/leads` | List all lead sessions (without messages) | Array of session summaries |
+| `GET` | `/leads/{session_id}` | Get full session detail with transcript | Full session object |
+| `POST` | `/leads/{session_id}/route` | Simulate CRM routing for a lead | Routing payload (action, priority, RM) |
+| `POST` | `/leads/{session_id}/summary` | Generate AI post-call summary | Objections, topics, recommended action |
+
+---
+
+## 7. Folder Structure
 ```text
 sarti-ai-hacakethon/
 │
 ├── frontend/                   # Next.js UI Application
 │   ├── src/app/
-│   │   ├── page.js             # Landing Page
-│   │   ├── globals.css         # Theme & Animation Definitions
-│   │   ├── chat/page.js        # The Live Voice Agent Interface
-│   │   └── dashboard/page.js   # Analytics & CRM Routing Dashboard
+│   │   ├── page.js             # Landing Page (React Icons)
+│   │   ├── globals.css         # OLED Emerald Theme & Animations
+│   │   ├── chat/page.js        # Voice Agent + Emotion Radar
+│   │   └── dashboard/page.js   # Analytics + CRM Export + Sentiment
 │   └── package.json            # React, Tailwind, React-Icons
 │
 ├── backend/                    # FastAPI Microservice
 │   ├── main.py                 # App Entrypoint & CORS
 │   ├── routers/
-│   │   ├── chat.py             # Message Ingestion
-│   │   └── leads.py            # Summary Generation & Routing
+│   │   ├── chat.py             # Message Ingestion + Emotion
+│   │   ├── leads.py            # Summary Generation & Routing
+│   │   └── schemas.py          # Pydantic Request/Response Models
 │   ├── services/
 │   │   ├── llm.py              # Gemini 3 Flash Integration
+│   │   ├── emotion.py          # 5-Axis Emotion Detection Engine
 │   │   ├── lead_scorer.py      # Math-based intent evaluation
+│   │   ├── language.py         # Hindi/Hinglish/English detection
+│   │   ├── conversation.py     # Orchestration pipeline
 │   │   └── session_store.py    # MongoDB Async connector
 │   ├── data/
 │   │   └── objections.json     # Anti-hallucination KB
 │   └── .env                    # Secrets (MongoDB URL, Gemini API Key)
 │
+├── ARCHITECTURE.md             # This file
 └── README.md                   # Quickstart Guide
 ```
+
