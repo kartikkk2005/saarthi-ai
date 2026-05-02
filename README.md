@@ -2,100 +2,122 @@
 
 ## 📌 Overview
 
-Saarthi.AI is a conceptual AI-driven system designed to optimize Rupeezy’s Authorized Person (AP) acquisition pipeline.
+Saarthi.AI is an idea we developed to improve how Rupeezy onboards Authorized Persons (APs).
 
-It addresses inefficiencies in traditional Relationship Manager (RM)-driven workflows by introducing a scalable, multilingual, and real-time lead qualification layer.
-
----
-
-## 🚨 Problem
-
-The current system suffers from three major bottlenecks:
-
-* ⏱️ **Latency Trap**
-  Leads decay quickly; RMs cannot respond instantly outside business hours.
-
-* 🌐 **Linguistic Barrier**
-  Single-language communication reduces trust in Tier-2 and Tier-3 markets.
-
-* 📉 **Throughput Ceiling**
-  RMs operate in a 1:1 model, limiting scalability.
+Right now, the process depends heavily on Relationship Managers (RMs), which creates delays and missed opportunities. Our goal is to introduce an AI-based system that can handle early-stage conversations with leads in a faster and more scalable way.
 
 ---
 
-## 💡 Proposed Solution
+## 🚨 What’s the Problem?
 
-Saarthi.AI acts as an intelligent front-line agent that:
+From our understanding, the current system has a few clear issues:
 
-* Responds instantly (24/7)
-* Supports multilingual and code-mixed conversations
-* Qualifies leads using a scoring system
-* Routes high-intent users to human RMs
+* ⏱️ **Delayed Responses**
+  Leads often come in outside working hours, and by the time someone follows up, the interest is already gone.
+
+* 🌐 **Language Gap**
+  Many potential partners are more comfortable in their native language, but communication is mostly limited.
+
+* 📉 **Limited Capacity**
+  Since RMs can only handle one person at a time, scaling becomes difficult during campaigns.
 
 ---
 
-## 🔑 Core Concepts
+## 💡 Our Approach
 
-### 🗣️ Multilingual Interaction
+Instead of replacing RMs, Saarthi.AI is designed to support them.
 
-* Dynamic language detection (Hindi, English, Hinglish, regional languages)
-* Context-aware responses in mixed language
+It works as a **first point of contact** that:
 
-### 🧠 Objection Handling
+* responds instantly,
+* talks in the user’s preferred language,
+* filters serious leads,
+* and passes only strong prospects to RMs.
 
-* Retrieval-based responses (RAG approach)
-* Context-sensitive rebuttals
+This allows RMs to focus more on closing rather than initial screening.
+
+---
+
+## 🔑 Key Ideas Behind the System
+
+### 🗣️ Multilingual Conversations
+
+The system is designed to handle:
+
+* Hindi, English, Hinglish, and regional languages
+* Mixed-language inputs (like “mera broker better hai”)
+* Replies in a similar language style as the user
+
+---
+
+### 🧠 Handling Objections
+
+Instead of fixed scripts, the idea is to:
+
+* understand what the user is saying,
+* refer to predefined knowledge,
+* and respond based on context.
+
+---
 
 ### 📊 Lead Qualification
 
-* Real-time scoring based on intent signals
-* Categories:
+Each interaction contributes to a simple scoring system:
 
-  * 🔥 Hot (>75)
-  * 🌤️ Warm (40–75)
-  * ❄️ Cold (<40)
-
-### 🔁 Multi-turn Memory
-
-* Conversation continuity across sessions
-
-### 📲 Smart Handoff
-
-* Hot leads → RM
-* Warm leads → WhatsApp follow-up
+* 🔥 **Hot** → very interested, ready for RM
+* 🌤️ **Warm** → interested but not fully convinced
+* ❄️ **Cold** → low intent or not relevant
 
 ---
 
-## 🏗️ High-Level Architecture (Conceptual)
+### 🔁 Conversation Memory
 
-* Backend: FastAPI (async processing)
-* Frontend: Dashboard (Next.js)
-* Database: MongoDB
-* AI Stack:
-
-  * STT: Whisper / Bhashini
-  * LLM: GPT-based models
-  * TTS: ElevenLabs
+If a user drops off and comes back later,
+the system should ideally continue from where it left off instead of starting over.
 
 ---
 
-## ⚠️ Challenges & Considerations
+### 📲 Lead Routing
 
-* Voice latency in real-time conversations
-* Handling interruptions (user speaking over AI)
-* Preventing hallucinated responses
+* Hot leads → sent directly to RM
+* Warm leads → followed up through WhatsApp
 
 ---
 
-## 👥 Collaboration
+## 🏗️ How We Imagine the System (Conceptual)
 
-This repository is maintained as a **team project**.
+We are not implementing this fully yet, but the idea is:
 
-### Workflow:
+* **Backend**: FastAPI (for handling requests asynchronously)
+* **Frontend**: Simple dashboard (Next.js)
+* **Database**: MongoDB
+* **AI Components**:
 
-* Create branches for changes
-* Use pull requests for merging
-* Maintain clear commit messages
+  * Speech-to-Text → Whisper / Bhashini
+  * Language Model → GPT-based
+  * Text-to-Speech → ElevenLabs
+
+---
+
+## ⚠️ Challenges We Noticed
+
+While thinking through this system, a few practical issues came up:
+
+* Real-time voice delay can break the experience
+* Users may interrupt while AI is speaking
+* AI might generate incorrect or misleading responses
+
+---
+
+## 👥 Team Collaboration
+
+This repository is maintained as a team project.
+
+We are using a simple workflow:
+
+* work on separate branches
+* create pull requests
+* review before merging
 
 ---
 
@@ -107,4 +129,4 @@ MIT License
 
 ## ✍️ Contributors
 
-* Add team members here
+* (Add your team members here)
