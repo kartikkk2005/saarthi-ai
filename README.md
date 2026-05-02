@@ -129,4 +129,4 @@ MIT License
 
 ## ✍️ Contributors
 
-* (Add your team members here)
+* Kartik D Chendekar | Abhilash Tiwari | Kaushal Prakash
