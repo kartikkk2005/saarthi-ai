@@ -315,7 +315,16 @@ export default function ChatPage() {
               </button>
             </div>
           </form>
-          <div className="text-center mt-2 text-[10px] text-gray-500">
+          <div className="text-center mt-2 text-[10px] text-gray-500 relative">
+            {isListening && (
+              <div className="absolute -top-16 left-1/2 -translate-x-1/2 flex items-end gap-1 h-8 px-4 py-2 glass-panel rounded-full animate-fade-in border border-primary-500/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
+                <div className="w-1 bg-primary-400 rounded-full waveform-bar" style={{animationDelay: '0.0s'}}></div>
+                <div className="w-1 bg-primary-400 rounded-full waveform-bar" style={{animationDelay: '0.2s'}}></div>
+                <div className="w-1 bg-primary-400 rounded-full waveform-bar" style={{animationDelay: '0.4s'}}></div>
+                <div className="w-1 bg-primary-400 rounded-full waveform-bar" style={{animationDelay: '0.1s'}}></div>
+                <div className="w-1 bg-primary-400 rounded-full waveform-bar" style={{animationDelay: '0.3s'}}></div>
+              </div>
+            )}
             Powered by Saarthi.AI Voice & NLP Engine.
           </div>
         </div>

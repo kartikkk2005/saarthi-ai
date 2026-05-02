@@ -2,7 +2,7 @@
 
 import { useState, useEffect, useMemo } from 'react';
 import Link from 'next/link';
-import { FiStar } from 'react-icons/fi';
+import { FiStar, FiDownload } from 'react-icons/fi';
 
 export default function DashboardPage() {
   const [leads, setLeads] = useState([]);
@@ -66,6 +66,32 @@ export default function DashboardPage() {
     } finally {
       setIsGeneratingSummary(false);
     }
+  };
+
+  const handleExport = () => {
+    if (!selectedLead) return;
+    
+    let content = `--- Saarthi.AI Lead Report ---\nSession ID: ${selectedLead.session_id}\nScore: ${selectedLead.score}\nClassification: ${selectedLead.classification}\n\n`;
+    
+    if (summaryResult) {
+      content += `--- AI Summary ---\n`;
+      content += `Action: ${summaryResult.action}\n`;
+      content += `Topics: ${summaryResult.topics?.join(', ')}\n`;
+      content += `Objections: ${summaryResult.objections?.join(', ')}\n\n`;
+    }
+    
+    content += `--- Transcript ---\n`;
+    selectedLead.messages.forEach(msg => {
+      content += `[${msg.role.toUpperCase()}]: ${msg.content}\n`;
+    });
+    
+    const blob = new Blob([content], { type: 'text/plain' });
+    const url = URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `lead_report_${selectedLead.session_id.substring(0,8)}.txt`;
+    a.click();
+    URL.revokeObjectURL(url);
   };
 
   const stats = useMemo(() => {
@@ -167,6 +193,12 @@ export default function DashboardPage() {
                   </div>
                   <div className="flex gap-2">
                     <button 
+                      onClick={handleExport}
+                      className="bg-white/5 hover:bg-white/10 text-white border border-white/10 px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2"
+                    >
+                      <FiDownload /> Export CRM
+                    </button>
+                    <button 
                       onClick={handleGenerateSummary}
                       disabled={isGeneratingSummary}
                       className="bg-secondary-500/20 hover:bg-secondary-500/30 text-secondary-300 border border-secondary-500/50 px-4 py-2 rounded-lg text-sm font-semibold transition-all flex items-center gap-2"
@@ -242,16 +274,35 @@ export default function DashboardPage() {
 
                   <h3 className="text-sm font-semibold text-gray-400 uppercase tracking-wider mb-4 border-b border-white/5 pb-2">Conversation Transcript</h3>
                   <div className="space-y-4">
-                    {selectedLead.messages.map((msg, i) => (
-                      <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                        <div className={`p-3 rounded-lg max-w-[80%] text-sm ${
-                          msg.role === 'user' ? 'bg-primary-600/20 text-white border border-primary-500/20' : 'bg-white/5 text-gray-300 border border-white/10'
-                        }`}>
-                          <div className="text-[10px] text-gray-500 mb-1 uppercase">{msg.role}</div>
-                          {msg.content}
+                    {selectedLead.messages.map((msg, i) => {
+                      // Basic Sentiment Badges based on keywords
+                      let sentimentBorder = 'border-white/10';
+                      let sentimentBadge = null;
+                      if (msg.role === 'user') {
+                        const content = msg.content.toLowerCase();
+                        if (content.match(/interested|join|yes|good|great|brokerage|how/)) {
+                          sentimentBorder = 'border-green-500/30';
+                          sentimentBadge = <span className="text-[9px] bg-green-500/20 text-green-400 px-1.5 py-0.5 rounded-full ml-2">High Intent</span>;
+                        } else if (content.match(/no|busy|later|already|expensive|scam|bad/)) {
+                          sentimentBorder = 'border-red-500/30';
+                          sentimentBadge = <span className="text-[9px] bg-red-500/20 text-red-400 px-1.5 py-0.5 rounded-full ml-2">Objection</span>;
+                        }
+                      }
+                      
+                      return (
+                        <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
+                          <div className={`p-3 rounded-lg max-w-[80%] text-sm ${
+                            msg.role === 'user' ? `bg-primary-600/20 text-white border ${sentimentBorder}` : 'bg-white/5 text-gray-300 border border-white/10'
+                          }`}>
+                            <div className="text-[10px] text-gray-500 mb-1 uppercase flex items-center">
+                              {msg.role}
+                              {sentimentBadge}
+                            </div>
+                            {msg.content}
+                          </div>
                         </div>
-                      </div>
-                    ))}
+                      );
+                    })}
                   </div>
                 </div>
               </>
