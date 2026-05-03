@@ -41,7 +41,7 @@ export default function Home() {
         </p>
         
         <div className="flex flex-col sm:flex-row gap-4 mb-24">
-          <Link href="/chat" className="bg-primary-600 hover:bg-primary-500 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all shadow-[0_0_40px_rgba(79,70,229,0.4)] hover:shadow-[0_0_60px_rgba(79,70,229,0.6)]">
+          <Link href="/chat" className="bg-primary-600 hover:bg-primary-500 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all shadow-[0_0_40px_rgba(214,169,157,0.4)] hover:shadow-[0_0_60px_rgba(214,169,157,0.6)]">
             Start Conversation
           </Link>
           <Link href="/dashboard" className="glass-panel hover:bg-white/5 text-white px-8 py-4 rounded-full text-lg font-semibold transition-all">
@@ -65,7 +65,7 @@ export default function Home() {
             {
               title: "Automated Routing",
               desc: "Routes high-intent Hot leads directly to RMs, while queuing Warm leads into personalized WhatsApp nurture flows.",
-              icon: <FiGitMerge className="text-orange-500" />
+              icon: <FiGitMerge className="text-accent-alert" />
             }
           ].map((feature, i) => (
             <div key={i} className="glass-panel p-6 rounded-2xl hover:bg-white/[0.04] transition-colors border border-white/5">

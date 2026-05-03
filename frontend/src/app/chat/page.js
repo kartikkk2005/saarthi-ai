@@ -189,7 +189,7 @@ export default function ChatPage() {
   }));
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-[#050505] text-gray-200 relative flex flex-col font-sans">
+    <div className="h-screen w-screen overflow-hidden bg-[#0A0908] text-gray-200 relative flex flex-col font-sans">
       
       {/* Neural Network Background Layer */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30 z-0">
@@ -200,8 +200,8 @@ export default function ChatPage() {
             const nextNode2 = nodes[(i + 3) % nodes.length];
             return (
               <g key={i}>
-                <line x1={`${node.x}%`} y1={`${node.y}%`} x2={`${nextNode1.x}%`} y2={`${nextNode1.y}%`} stroke="rgba(0, 136, 255, 0.2)" strokeWidth="1" />
-                <line x1={`${node.x}%`} y1={`${node.y}%`} x2={`${nextNode2.x}%`} y2={`${nextNode2.y}%`} stroke="rgba(157, 0, 255, 0.1)" strokeWidth="1" />
+                <line x1={`${node.x}%`} y1={`${node.y}%`} x2={`${nextNode1.x}%`} y2={`${nextNode1.y}%`} stroke="rgba(214, 169, 157, 0.2)" strokeWidth="1" />
+                <line x1={`${node.x}%`} y1={`${node.y}%`} x2={`${nextNode2.x}%`} y2={`${nextNode2.y}%`} stroke="rgba(242, 208, 169, 0.1)" strokeWidth="1" />
               </g>
             );
           })}
@@ -216,7 +216,7 @@ export default function ChatPage() {
               width: `${node.size}px`,
               height: `${node.size}px`,
               animationDelay: `${node.delay}s`,
-              boxShadow: '0 0 10px #00f0ff'
+              boxShadow: '0 0 10px #FFEDE1'
             }}
           />
         ))}
@@ -266,7 +266,7 @@ export default function ChatPage() {
 
         {/* Settings Panel */}
         {showSettings && (
-          <div className="absolute top-24 right-6 w-80 glass-panel border border-primary-500/50 rounded-lg p-5 z-50 animate-slide-left shadow-[0_0_30px_rgba(0,136,255,0.2)]">
+          <div className="absolute top-24 right-6 w-80 glass-panel border border-primary-500/50 rounded-lg p-5 z-50 animate-slide-left shadow-[0_0_30px_rgba(214,169,157,0.2)]">
             <h3 className="text-primary-300 font-mono mb-4 text-xs tracking-widest flex items-center justify-between border-b border-primary-500/30 pb-2">
               SYSTEM_PREFERENCES
               <button onClick={() => setShowSettings(false)} className="text-gray-400 hover:text-white"><FiX /></button>
@@ -324,12 +324,12 @@ export default function ChatPage() {
               <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end animate-slide-left' : 'justify-start animate-slide-right'}`}>
                 <div className={`relative max-w-[90%] p-4 rounded-lg text-sm md:text-base border ${
                   msg.role === 'user' 
-                    ? 'bg-primary-600/10 text-primary-100 border-primary-500/30 shadow-[0_0_15px_rgba(0,136,255,0.1)]' 
+                    ? 'bg-primary-600/10 text-primary-100 border-primary-500/30 shadow-[0_0_15px_rgba(214,169,157,0.1)]' 
                     : 'glass-panel text-gray-300 border-white/10'
                 }`}>
                   {/* Glowing connector line */}
                   <div className={`absolute top-1/2 -translate-y-1/2 w-8 h-[1px] ${msg.role === 'user' ? 'bg-primary-500/50 -right-8' : 'bg-white/20 -left-8'}`} />
-                  <div className={`absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full ${msg.role === 'user' ? 'bg-primary-400 -right-8 shadow-[0_0_5px_#00f0ff]' : 'bg-white/50 -left-8'}`} />
+                  <div className={`absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full ${msg.role === 'user' ? 'bg-primary-400 -right-8 shadow-[0_0_5px_#FFEDE1]' : 'bg-white/50 -left-8'}`} />
                   
                   {msg.role === 'assistant' && msg.content.includes('High Intent') && (
                     <span className="absolute -top-3 left-2 bg-accent-success/20 border border-accent-success text-accent-success text-[9px] uppercase px-2 py-0.5 rounded tracking-widest animate-glitch">
@@ -369,17 +369,17 @@ export default function ChatPage() {
               Neural_State_Analysis
             </h3>
             
-            <svg viewBox="0 0 200 200" className="w-full drop-shadow-[0_0_15px_rgba(0,136,255,0.3)]">
+            <svg viewBox="0 0 200 200" className="w-full drop-shadow-[0_0_15px_rgba(214,169,157,0.3)]">
               {/* Radar Grids */}
               {[1, 0.66, 0.33].map((scale, si) => (
-                <polygon key={si} points={getRadarPoints(Array(5).fill(scale * 100), 100, 100, 70)} fill="none" stroke="rgba(0, 136, 255, 0.15)" strokeWidth="1" />
+                <polygon key={si} points={getRadarPoints(Array(5).fill(scale * 100), 100, 100, 70)} fill="none" stroke="rgba(214, 169, 157, 0.15)" strokeWidth="1" />
               ))}
               {/* Axes */}
               {[0,1,2,3,4].map(i => {
                 const angle = (Math.PI * 2 * i / 5) - Math.PI / 2;
                 const x = 100 + 70 * Math.cos(angle);
                 const y = 100 + 70 * Math.sin(angle);
-                return <line key={i} x1="100" y1="100" x2={x} y2={y} stroke="rgba(0, 136, 255, 0.2)" strokeWidth="1" />;
+                return <line key={i} x1="100" y1="100" x2={x} y2={y} stroke="rgba(214, 169, 157, 0.2)" strokeWidth="1" />;
               })}
               
               {/* Emotion Polygon */}
@@ -391,11 +391,11 @@ export default function ChatPage() {
                   emotion.scores.skeptical,
                   emotion.scores.frustrated
                 ], 100, 100, 70)}
-                fill="rgba(0, 240, 255, 0.2)"
-                stroke="#00f0ff"
+                fill="rgba(255, 237, 225, 0.2)"
+                stroke="#FFEDE1"
                 strokeWidth="1.5"
                 className="transition-all duration-700"
-                style={{ filter: 'drop-shadow(0 0 5px rgba(0, 240, 255, 0.5))' }}
+                style={{ filter: 'drop-shadow(0 0 5px rgba(255, 237, 225, 0.5))' }}
               />
               
               {/* Data Points & Labels */}
@@ -414,7 +414,7 @@ export default function ChatPage() {
                 const ly = 100 + 85 * Math.sin(angle);
                 return (
                   <g key={i}>
-                    <circle cx={px} cy={py} r="2.5" fill="#fff" className="transition-all duration-700 shadow-[0_0_5px_#fff]" />
+                    <circle cx={px} cy={py} r="2.5" fill="#FFEDE1" className="transition-all duration-700 shadow-[0_0_5px_#FFEDE1]" />
                     <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" fill="#64748b" fontSize="7" fontFamily="monospace" letterSpacing="1">{item.label}</text>
                   </g>
                 );
@@ -437,14 +437,14 @@ export default function ChatPage() {
       </main>
 
       {/* Bottom Bar: Voice Interaction */}
-      <footer className="absolute bottom-0 w-full p-6 z-20 flex flex-col items-center justify-end bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent h-48">
+      <footer className="absolute bottom-0 w-full p-6 z-20 flex flex-col items-center justify-end bg-gradient-to-t from-[#0A0908] via-[#0A0908]/80 to-transparent h-48">
         
         {/* Waveform Visualizer */}
         <div className="h-12 flex items-end gap-1 mb-4 opacity-80">
           {(isListening || isLoading) && Array.from({length: 15}).map((_, i) => (
             <div 
               key={i} 
-              className={`w-1 rounded-t-sm ${isListening ? 'bg-accent-alert shadow-[0_0_10px_#ff4d00]' : 'bg-primary-400 shadow-[0_0_10px_#00b8ff]'} waveform-bar`} 
+              className={`w-1 rounded-t-sm ${isListening ? 'bg-accent-alert shadow-[0_0_10px_#9F8772]' : 'bg-primary-400 shadow-[0_0_10px_#D6A99D]'} waveform-bar`} 
               style={{ animationDelay: `${i * 0.1}s`, height: isListening ? '8px' : '4px' }}
             />
           ))}
@@ -457,7 +457,7 @@ export default function ChatPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="DATA_INPUT_STREAM..."
-              className="w-full bg-black/40 border border-primary-500/20 rounded-l-full rounded-r-full py-4 px-8 text-sm font-mono text-primary-100 placeholder-primary-500/40 focus:outline-none focus:border-primary-400 focus:bg-primary-900/10 transition-all shadow-[inset_0_0_20px_rgba(0,136,255,0.05)] pr-32"
+              className="w-full bg-black/40 border border-primary-500/20 rounded-l-full rounded-r-full py-4 px-8 text-sm font-mono text-primary-100 placeholder-primary-500/40 focus:outline-none focus:border-primary-400 focus:bg-primary-900/10 transition-all shadow-[inset_0_0_20px_rgba(214,169,157,0.05)] pr-32"
               disabled={isLoading}
             />
             
@@ -466,7 +466,7 @@ export default function ChatPage() {
               onClick={toggleListening}
               className={`absolute right-14 w-10 h-10 flex items-center justify-center rounded-full transition-all ${
                 isListening 
-                  ? 'bg-accent-alert text-white animate-pulse shadow-[0_0_15px_#ff4d00]' 
+                  ? 'bg-accent-alert text-white animate-pulse shadow-[0_0_15px_#9F8772]' 
                   : 'bg-primary-500/10 text-primary-400 hover:bg-primary-500/30'
               }`}
             >
