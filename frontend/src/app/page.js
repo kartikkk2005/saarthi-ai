@@ -12,7 +12,7 @@ export default function Home() {
       <Hero3D />
 
       {/* Header */}
-      <header className="w-full p-6 flex justify-between items-center z-10 glass-panel border-b-0 border-x-0 border-t-0 fixed top-0">
+      <header className="w-full p-6 flex justify-between items-center z-50 border-b border-gray-200/50 fixed top-0 bg-white/70 backdrop-blur-md shadow-sm">
         <div className="text-2xl font-bold tracking-tight text-primary-600">
           Saarthi<span className="text-secondary-500">.AI</span>
         </div>
@@ -27,7 +27,7 @@ export default function Home() {
       </header>
 
       {/* Hero Section */}
-      <main className="flex-1 flex flex-col items-center justify-center p-8 text-center z-10 mt-24">
+      <main className="flex-1 flex flex-col items-center justify-center p-8 text-center z-20 mt-28 pointer-events-none [&>*]:pointer-events-auto">
         <motion.div 
           initial={{ opacity: 0, y: 20 }}
           animate={{ opacity: 1, y: 0 }}

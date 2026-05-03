@@ -165,9 +165,9 @@ export default function ChatPage() {
 
   const getStatusColor = (classification) => {
     switch(classification) {
-      case 'Hot': return 'text-accent-success neon-text';
-      case 'Warm': return 'text-accent-alert neon-text';
-      default: return 'text-primary-300 neon-text';
+      case 'Hot': return 'text-red-600 font-bold';
+      case 'Warm': return 'text-orange-600 font-bold';
+      default: return 'text-blue-600 font-bold';
     }
   };
 
@@ -232,23 +232,23 @@ export default function ChatPage() {
       </div>
 
       {/* Top Bar */}
-      <header className="w-full p-6 flex justify-between items-center z-50 relative">
+      <header className="w-full p-6 flex justify-between items-center z-50 relative bg-white/60 backdrop-blur-md border-b border-gray-200/50">
         <Link href="/" className="text-2xl font-bold tracking-widest text-primary-600 flex items-center gap-3">
           <span className="text-xl">Saarthi.AI</span>
-          <div className="h-1 w-1 rounded-full bg-primary-300 animate-pulse"></div>
+          <div className="h-1 w-1 rounded-full bg-primary-500 animate-pulse"></div>
         </Link>
         
         <div className="flex gap-6 items-center">
           <div className="hidden md:flex flex-col items-end">
-            <span className="text-[10px] uppercase tracking-[0.2em] text-gray-500">System Status</span>
-            <span className="text-xs font-mono text-primary-400 animate-pulse">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-gray-600 font-semibold">System Status</span>
+            <span className="text-xs font-mono text-gray-800 font-bold">
               {isListening ? 'LISTENING_AUDIO...' : isLoading ? 'PROCESSING_DATA...' : 'AWAITING_INPUT'}
             </span>
           </div>
           
-          <div className="glass-panel px-4 py-2 rounded-lg text-xs font-mono border border-primary-500/30 flex items-center gap-3">
-            <span className="text-gray-400">LEAD_CLASS:</span>
-            <span className={`font-bold tracking-wider ${getStatusColor(leadStatus.classification)} ${leadStatus.classification === 'Hot' ? 'animate-glitch' : ''}`}>
+          <div className="bg-white/80 backdrop-blur-sm px-4 py-2 rounded-lg text-xs font-mono border border-gray-300 flex items-center gap-3 shadow-sm">
+            <span className="text-gray-600 font-semibold">LEAD_CLASS:</span>
+            <span className={`tracking-wider ${getStatusColor(leadStatus.classification)} ${leadStatus.classification === 'Hot' ? 'animate-glitch' : ''}`}>
               {leadStatus.classification.toUpperCase()} [{leadStatus.score}]
             </span>
           </div>
@@ -266,17 +266,17 @@ export default function ChatPage() {
 
         {/* Settings Panel */}
         {showSettings && (
-          <div className="absolute top-24 right-6 w-80 glass-panel border border-primary-500/30 rounded-lg p-5 z-50 animate-slide-left shadow-lg">
-            <h3 className="text-primary-600 font-mono mb-4 text-xs tracking-widest flex items-center justify-between border-b border-primary-500/30 pb-2">
+          <div className="absolute top-24 right-6 w-80 bg-white/90 backdrop-blur-xl border border-gray-300 rounded-2xl p-5 z-50 animate-slide-left shadow-2xl">
+            <h3 className="text-gray-900 font-mono mb-4 text-xs tracking-widest flex items-center justify-between border-b border-gray-200 pb-2 font-bold">
               SYSTEM_PREFERENCES
-              <button onClick={() => setShowSettings(false)} className="text-gray-500 hover:text-gray-800"><FiX /></button>
+              <button onClick={() => setShowSettings(false)} className="text-gray-500 hover:text-gray-900 transition-colors"><FiX /></button>
             </h3>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-[10px] uppercase tracking-wider text-gray-500 mb-2">Voice_Matrix</label>
+                <label className="block text-[10px] uppercase tracking-wider text-gray-700 mb-2 font-semibold">Voice_Matrix</label>
                 <select 
-                  className="w-full bg-white/50 border border-primary-500/30 rounded p-2 text-xs text-gray-800 outline-none focus:border-primary-500 shadow-inner"
+                  className="w-full bg-white border border-gray-300 rounded-lg p-2.5 text-xs text-gray-900 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 shadow-sm"
                   value={selectedVoiceURI}
                   onChange={(e) => setSelectedVoiceURI(e.target.value)}
                 >
@@ -289,22 +289,22 @@ export default function ChatPage() {
               </div>
 
               <div>
-                <label className="block text-[10px] uppercase tracking-wider text-gray-500 mb-2 flex justify-between">
+                <label className="block text-[10px] uppercase tracking-wider text-gray-700 mb-2 flex justify-between font-semibold">
                   <span>Output_Speed</span>
-                  <span className="text-primary-400">{speechRate.toFixed(2)}x</span>
+                  <span className="text-primary-600 font-bold">{speechRate.toFixed(2)}x</span>
                 </label>
                 <input 
                   type="range" min="0.5" max="2" step="0.05"
                   value={speechRate}
                   onChange={(e) => setSpeechRate(parseFloat(e.target.value))}
-                  className="w-full accent-primary-500"
+                  className="w-full accent-primary-600"
                 />
               </div>
               
               <div className="pt-3">
                 <button 
                   onClick={() => speakResponse("System audio sequence initiated. All modules nominal.")}
-                  className="w-full glass-panel hover:bg-primary-100 border border-primary-500/30 rounded py-2 text-xs tracking-widest text-primary-600 transition-colors shadow-sm"
+                  className="w-full bg-primary-50 hover:bg-primary-100 border border-primary-300 rounded-lg py-2.5 text-xs tracking-widest text-primary-700 font-bold transition-colors shadow-sm"
                 >
                   <span className="flex items-center justify-center gap-2"><FiPlay /> RUN_DIAGNOSTIC</span>
                 </button>
@@ -391,11 +391,11 @@ export default function ChatPage() {
                   emotion.scores.skeptical,
                   emotion.scores.frustrated
                 ], 100, 100, 70)}
-                fill="rgba(255, 237, 225, 0.2)"
-                stroke="#FFEDE1"
+                fill="rgba(214, 169, 157, 0.25)"
+                stroke="#D6A99D"
                 strokeWidth="1.5"
                 className="transition-all duration-700"
-                style={{ filter: 'drop-shadow(0 0 5px rgba(255, 237, 225, 0.5))' }}
+                style={{ filter: 'drop-shadow(0 0 5px rgba(214, 169, 157, 0.4))' }}
               />
               
               {/* Data Points & Labels */}
@@ -422,12 +422,12 @@ export default function ChatPage() {
             </svg>
             
             <div className="text-center mt-6">
-              <span className={`text-[10px] uppercase font-mono tracking-widest px-3 py-1 rounded border ${
-                emotion.dominant === 'excited' ? 'bg-accent-success/10 text-accent-success border-accent-success/30' :
-                emotion.dominant === 'curious' ? 'bg-primary-500/10 text-primary-300 border-primary-500/30' :
-                emotion.dominant === 'skeptical' ? 'bg-secondary-500/10 text-secondary-300 border-secondary-500/30' :
-                emotion.dominant === 'frustrated' ? 'bg-accent-alert/10 text-accent-alert border-accent-alert/30' :
-                'bg-gray-800/50 text-gray-400 border-gray-700'
+              <span className={`text-[10px] uppercase font-mono tracking-widest px-3 py-1.5 rounded-lg border font-bold ${
+                emotion.dominant === 'excited' ? 'bg-green-50 text-green-700 border-green-300' :
+                emotion.dominant === 'curious' ? 'bg-primary-50 text-primary-700 border-primary-300' :
+                emotion.dominant === 'skeptical' ? 'bg-orange-50 text-orange-700 border-orange-300' :
+                emotion.dominant === 'frustrated' ? 'bg-red-50 text-red-700 border-red-300' :
+                'bg-gray-100 text-gray-700 border-gray-300'
               }`}>
                 DOMINANT_STATE: {emotion.dominant}
               </span>
@@ -485,7 +485,7 @@ export default function ChatPage() {
           </form>
         </div>
         
-        <div className="text-[9px] uppercase tracking-widest text-primary-500/50 font-mono mt-4">
+        <div className="text-[9px] uppercase tracking-widest text-gray-500 font-mono mt-4 font-bold">
           SAARTHI.AI // NEURAL_LINK_ACTIVE
         </div>
       </footer>
