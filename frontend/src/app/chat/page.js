@@ -2,10 +2,10 @@
 
 import { useState, useRef, useEffect } from 'react';
 import Link from 'next/link';
-import { FiX, FiPlay } from 'react-icons/fi';
+import { FiX, FiPlay, FiMic } from 'react-icons/fi';
 
 export default function ChatPage() {
-  const [messages, setMessages] = useState([{ role: 'assistant', content: 'Hello! I am Saarthi.AI. How can I help you regarding our Partner Program today?' }]);
+  const [messages, setMessages] = useState([{ role: 'assistant', content: 'System Initialized. I am Saarthi.AI. How can I assist you today?' }]);
   const [input, setInput] = useState('');
   const [sessionId, setSessionId] = useState(null);
   const [leadStatus, setLeadStatus] = useState({ score: 0, classification: 'Cold' });
@@ -38,7 +38,6 @@ export default function ChatPage() {
         const voices = window.speechSynthesis.getVoices();
         if (voices.length > 0) {
           setAvailableVoices(voices);
-          // Set default only if none is selected
           if (!selectedVoiceURI) {
             let bestVoice = voices.find(v => (v.lang.includes('hi') || v.lang.includes('IN')) && v.name.includes('Google'));
             if (!bestVoice) bestVoice = voices.find(v => v.name.includes('Google') && v.lang.includes('UK'));
@@ -109,9 +108,9 @@ export default function ChatPage() {
       setIsListening(false);
       
       if (event.error === 'network') {
-        alert("Microphone Error: Please ensure you are connected to the internet. If you are accessing this app via an IP address (like 192.168.x.x), Chrome blocks the microphone. Please open http://localhost:3000 instead.");
+        alert("Microphone Error: Please ensure you are connected to the internet.");
       } else if (event.error === 'not-allowed' || event.error === 'denied') {
-        alert("Microphone access was denied. Please allow microphone permissions in your browser to use the Voice Agent.");
+        alert("Microphone access was denied. Please allow microphone permissions.");
       }
     };
 
@@ -145,7 +144,6 @@ export default function ChatPage() {
       setMessages(prev => [...prev, { role: 'assistant', content: data.response }]);
       setLeadStatus({ score: data.score, classification: data.classification });
       
-      // Update Emotion Radar
       if (data.emotion && data.emotion.scores) {
         setEmotion(data.emotion);
       }
@@ -154,7 +152,7 @@ export default function ChatPage() {
       
     } catch (error) {
       console.error(error);
-      setMessages(prev => [...prev, { role: 'assistant', content: 'Sorry, the AI engine is currently unavailable. Please ensure the backend is running.' }]);
+      setMessages(prev => [...prev, { role: 'assistant', content: 'Connection to core server lost. Retrying...' }]);
     } finally {
       setIsLoading(false);
     }
@@ -167,13 +165,13 @@ export default function ChatPage() {
 
   const getStatusColor = (classification) => {
     switch(classification) {
-      case 'Hot': return 'text-red-500 bg-red-500/10 border-red-500/20';
-      case 'Warm': return 'text-orange-500 bg-orange-500/10 border-orange-500/20';
-      default: return 'text-blue-400 bg-blue-500/10 border-blue-500/20';
+      case 'Hot': return 'text-accent-success neon-text';
+      case 'Warm': return 'text-accent-alert neon-text';
+      default: return 'text-primary-300 neon-text';
     }
   };
 
-  // SVG Radar Chart helper: converts 5 values (0-100) to polygon points
+  // SVG Radar Chart helper
   const getRadarPoints = (values, cx, cy, maxR) => {
     return values.map((val, i) => {
       const angle = (Math.PI * 2 * i / values.length) - Math.PI / 2;
@@ -182,28 +180,82 @@ export default function ChatPage() {
     }).join(' ');
   };
 
+  // Background Neural Nodes Generation
+  const nodes = Array.from({ length: 20 }).map((_, i) => ({
+    x: Math.random() * 100,
+    y: Math.random() * 100,
+    size: Math.random() * 4 + 2,
+    delay: Math.random() * 5
+  }));
+
   return (
-    <div className="h-screen flex flex-col bg-gray-950">
-      {/* Header */}
-      <header className="w-full p-4 flex justify-between items-center z-10 glass-panel border-b border-white/5 relative">
-        <Link href="/" className="text-xl font-bold bg-clip-text text-transparent bg-gradient-to-r from-primary-500 to-secondary-500 flex items-center gap-2">
-          <span>←</span> Saarthi.AI
+    <div className="h-screen w-screen overflow-hidden bg-[#050505] text-gray-200 relative flex flex-col font-sans">
+      
+      {/* Neural Network Background Layer */}
+      <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30 z-0">
+        <svg className="w-full h-full absolute">
+          {nodes.map((node, i) => {
+            // Draw lines to a few next nodes to simulate network
+            const nextNode1 = nodes[(i + 1) % nodes.length];
+            const nextNode2 = nodes[(i + 3) % nodes.length];
+            return (
+              <g key={i}>
+                <line x1={`${node.x}%`} y1={`${node.y}%`} x2={`${nextNode1.x}%`} y2={`${nextNode1.y}%`} stroke="rgba(0, 136, 255, 0.2)" strokeWidth="1" />
+                <line x1={`${node.x}%`} y1={`${node.y}%`} x2={`${nextNode2.x}%`} y2={`${nextNode2.y}%`} stroke="rgba(157, 0, 255, 0.1)" strokeWidth="1" />
+              </g>
+            );
+          })}
+        </svg>
+        {nodes.map((node, i) => (
+          <div 
+            key={i} 
+            className="absolute rounded-full bg-primary-400 animate-pulse-core"
+            style={{
+              left: `${node.x}%`,
+              top: `${node.y}%`,
+              width: `${node.size}px`,
+              height: `${node.size}px`,
+              animationDelay: `${node.delay}s`,
+              boxShadow: '0 0 10px #00f0ff'
+            }}
+          />
+        ))}
+      </div>
+
+      {/* Central AI Core Orb */}
+      <div className="absolute top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 z-0 pointer-events-none flex items-center justify-center">
+        <div className={`w-64 h-64 md:w-96 md:h-96 rounded-full bg-gradient-to-br from-primary-500/20 to-secondary-500/20 backdrop-blur-3xl flex items-center justify-center transition-all duration-700 ${isListening || isLoading ? 'animate-core-active scale-110' : 'animate-pulse-core'}`}>
+          <div className="w-48 h-48 md:w-64 md:h-64 rounded-full bg-gradient-to-tr from-primary-400/40 to-transparent flex items-center justify-center">
+            <div className="w-32 h-32 md:w-40 md:h-40 rounded-full bg-primary-300/30 blur-md"></div>
+          </div>
+        </div>
+      </div>
+
+      {/* Top Bar */}
+      <header className="w-full p-6 flex justify-between items-center z-10 relative">
+        <Link href="/" className="text-2xl font-bold tracking-widest text-primary-300 neon-text flex items-center gap-3">
+          <span className="text-xl">Saarthi.AI</span>
+          <div className="h-1 w-1 rounded-full bg-primary-300 animate-pulse"></div>
         </Link>
         
-        <div className="flex gap-4 items-center">
-          {/* Dynamic Lead Status Indicator */}
-          <div className="hidden md:flex glass-panel px-4 py-1.5 rounded-full text-xs font-medium border border-white/5 items-center gap-2 text-gray-300">
-            Session: <span className="font-mono text-gray-400">{sessionId ? sessionId.substring(0, 8) : 'New'}</span>
-          </div>
-          <div className={`px-4 py-1.5 rounded-full text-xs font-bold border flex items-center gap-2 transition-colors ${getStatusColor(leadStatus.classification)}`}>
-            {leadStatus.classification} ({leadStatus.score})
+        <div className="flex gap-6 items-center">
+          <div className="hidden md:flex flex-col items-end">
+            <span className="text-[10px] uppercase tracking-[0.2em] text-gray-500">System Status</span>
+            <span className="text-xs font-mono text-primary-400 animate-pulse">
+              {isListening ? 'LISTENING_AUDIO...' : isLoading ? 'PROCESSING_DATA...' : 'AWAITING_INPUT'}
+            </span>
           </div>
           
-          {/* Settings Toggle */}
+          <div className="glass-panel px-4 py-2 rounded-lg text-xs font-mono border border-primary-500/30 flex items-center gap-3">
+            <span className="text-gray-400">LEAD_CLASS:</span>
+            <span className={`font-bold tracking-wider ${getStatusColor(leadStatus.classification)} ${leadStatus.classification === 'Hot' ? 'animate-glitch' : ''}`}>
+              {leadStatus.classification.toUpperCase()} [{leadStatus.score}]
+            </span>
+          </div>
+          
           <button 
             onClick={() => setShowSettings(!showSettings)}
-            className="p-2 text-gray-400 hover:text-white glass-panel rounded-full border border-white/5 transition-all"
-            title="Voice Settings"
+            className="p-2 text-primary-300 hover:text-white glass-panel rounded-lg border border-primary-500/30 transition-all neon-border"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" />
@@ -212,54 +264,49 @@ export default function ChatPage() {
           </button>
         </div>
 
-        {/* Settings Dropdown Panel */}
+        {/* Settings Panel */}
         {showSettings && (
-          <div className="absolute top-20 right-4 w-80 glass-panel border border-white/10 rounded-2xl shadow-2xl p-5 z-50 animate-slide-up">
-            <h3 className="text-white font-semibold mb-4 text-sm flex items-center justify-between">
-              Voice Settings
+          <div className="absolute top-24 right-6 w-80 glass-panel border border-primary-500/50 rounded-lg p-5 z-50 animate-slide-left shadow-[0_0_30px_rgba(0,136,255,0.2)]">
+            <h3 className="text-primary-300 font-mono mb-4 text-xs tracking-widest flex items-center justify-between border-b border-primary-500/30 pb-2">
+              SYSTEM_PREFERENCES
               <button onClick={() => setShowSettings(false)} className="text-gray-400 hover:text-white"><FiX /></button>
             </h3>
             
             <div className="space-y-4">
               <div>
-                <label className="block text-xs text-gray-400 mb-1">Select Voice Profile</label>
+                <label className="block text-[10px] uppercase tracking-wider text-gray-500 mb-2">Voice_Matrix</label>
                 <select 
-                  className="w-full bg-gray-900/80 border border-white/10 rounded-lg p-2 text-sm text-gray-200 focus:ring-1 focus:ring-primary-500 outline-none"
+                  className="w-full bg-black/50 border border-primary-500/30 rounded p-2 text-xs text-primary-100 outline-none focus:border-primary-300"
                   value={selectedVoiceURI}
                   onChange={(e) => setSelectedVoiceURI(e.target.value)}
                 >
                   {availableVoices.length > 0 ? (
                     availableVoices.map((voice, idx) => (
-                      <option key={idx} value={voice.voiceURI}>
-                        {voice.name} ({voice.lang})
-                      </option>
+                      <option key={idx} value={voice.voiceURI}>{voice.name} ({voice.lang})</option>
                     ))
-                  ) : (
-                    <option>Loading voices...</option>
-                  )}
+                  ) : <option>LOADING_MODULES...</option>}
                 </select>
               </div>
 
               <div>
-                <label className="block text-xs text-gray-400 mb-1 flex justify-between">
-                  <span>Speech Speed</span>
-                  <span>{speechRate.toFixed(2)}x</span>
+                <label className="block text-[10px] uppercase tracking-wider text-gray-500 mb-2 flex justify-between">
+                  <span>Output_Speed</span>
+                  <span className="text-primary-400">{speechRate.toFixed(2)}x</span>
                 </label>
                 <input 
-                  type="range" 
-                  min="0.5" max="2" step="0.05"
+                  type="range" min="0.5" max="2" step="0.05"
                   value={speechRate}
                   onChange={(e) => setSpeechRate(parseFloat(e.target.value))}
                   className="w-full accent-primary-500"
                 />
               </div>
               
-              <div className="pt-2">
+              <div className="pt-3">
                 <button 
-                  onClick={() => speakResponse("This is a voice test for Saarthi.AI.")}
-                  className="w-full bg-white/5 hover:bg-white/10 border border-white/5 rounded-lg py-2 text-sm text-white transition-colors"
+                  onClick={() => speakResponse("System audio sequence initiated. All modules nominal.")}
+                  className="w-full glass-panel hover:bg-primary-600/20 border border-primary-500/30 rounded py-2 text-xs tracking-widest text-primary-300 transition-colors"
                 >
-                  <span className="flex items-center justify-center gap-2"><FiPlay /> Test Voice</span>
+                  <span className="flex items-center justify-center gap-2"><FiPlay /> RUN_DIAGNOSTIC</span>
                 </button>
               </div>
             </div>
@@ -267,26 +314,75 @@ export default function ChatPage() {
         )}
       </header>
 
-      {/* Chat Area */}
-      <main className="flex-1 overflow-y-auto p-4 md:p-8 scroll-smooth">
-        <div className="max-w-5xl mx-auto flex gap-6">
-        {/* Emotion Radar Sidebar */}
-        <div className="hidden lg:flex flex-col items-center w-48 shrink-0 sticky top-4 self-start">
-          <div className="glass-panel rounded-2xl border border-white/5 p-4 w-full">
-            <h3 className="text-[10px] uppercase tracking-wider text-gray-500 text-center mb-3 font-semibold">Emotion Radar</h3>
-            <svg viewBox="0 0 200 200" className="w-full">
-              {/* Pentagon Grid Lines */}
+      {/* Main Layout Area */}
+      <main className="flex-1 w-full max-w-[1600px] mx-auto flex justify-between px-6 pb-24 z-10 h-full overflow-hidden">
+        
+        {/* Left Side: Conversation Stream */}
+        <div className="w-full md:w-1/3 h-full flex flex-col justify-end pb-10">
+          <div className="overflow-y-auto pr-4 scroll-smooth space-y-6 flex-1 flex flex-col justify-end pb-4" style={{maskImage: 'linear-gradient(to bottom, transparent, black 15%, black)'}}>
+            {messages.map((msg, i) => (
+              <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end animate-slide-left' : 'justify-start animate-slide-right'}`}>
+                <div className={`relative max-w-[90%] p-4 rounded-lg text-sm md:text-base border ${
+                  msg.role === 'user' 
+                    ? 'bg-primary-600/10 text-primary-100 border-primary-500/30 shadow-[0_0_15px_rgba(0,136,255,0.1)]' 
+                    : 'glass-panel text-gray-300 border-white/10'
+                }`}>
+                  {/* Glowing connector line */}
+                  <div className={`absolute top-1/2 -translate-y-1/2 w-8 h-[1px] ${msg.role === 'user' ? 'bg-primary-500/50 -right-8' : 'bg-white/20 -left-8'}`} />
+                  <div className={`absolute top-1/2 -translate-y-1/2 w-1.5 h-1.5 rounded-full ${msg.role === 'user' ? 'bg-primary-400 -right-8 shadow-[0_0_5px_#00f0ff]' : 'bg-white/50 -left-8'}`} />
+                  
+                  {msg.role === 'assistant' && msg.content.includes('High Intent') && (
+                    <span className="absolute -top-3 left-2 bg-accent-success/20 border border-accent-success text-accent-success text-[9px] uppercase px-2 py-0.5 rounded tracking-widest animate-glitch">
+                      High_Intent_Detected
+                    </span>
+                  )}
+                  {msg.role === 'assistant' && msg.content.includes('Objection') && (
+                    <span className="absolute -top-3 left-2 bg-accent-alert/20 border border-accent-alert text-accent-alert text-[9px] uppercase px-2 py-0.5 rounded tracking-widest animate-glitch">
+                      Objection_Logged
+                    </span>
+                  )}
+                  
+                  <p className="leading-relaxed whitespace-pre-wrap font-light">{msg.content}</p>
+                </div>
+              </div>
+            ))}
+            {isLoading && (
+              <div className="flex justify-start animate-fade-in">
+                <div className="glass-panel p-4 rounded-lg border border-primary-500/30 flex gap-2">
+                  <span className="w-1.5 h-1.5 bg-primary-400 rounded-full animate-bounce" />
+                  <span className="w-1.5 h-1.5 bg-primary-400 rounded-full animate-bounce" style={{animationDelay: '0.2s'}} />
+                  <span className="w-1.5 h-1.5 bg-primary-400 rounded-full animate-bounce" style={{animationDelay: '0.4s'}} />
+                </div>
+              </div>
+            )}
+            <div ref={messagesEndRef} />
+          </div>
+        </div>
+
+        {/* Right Side: Emotion Radar */}
+        <div className="hidden lg:flex w-1/4 h-full flex-col justify-center items-end pr-10">
+          <div className="glass-panel rounded-xl border border-primary-500/20 p-6 w-full max-w-sm relative overflow-hidden">
+            <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-500 to-transparent opacity-50"></div>
+            
+            <h3 className="text-[10px] uppercase tracking-[0.2em] text-primary-300 text-center mb-6 font-mono flex items-center justify-center gap-2">
+              <span className="w-2 h-2 rounded bg-primary-400 animate-pulse"></span>
+              Neural_State_Analysis
+            </h3>
+            
+            <svg viewBox="0 0 200 200" className="w-full drop-shadow-[0_0_15px_rgba(0,136,255,0.3)]">
+              {/* Radar Grids */}
               {[1, 0.66, 0.33].map((scale, si) => (
-                <polygon key={si} points={getRadarPoints(Array(5).fill(scale * 100), 100, 100, 70)} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
+                <polygon key={si} points={getRadarPoints(Array(5).fill(scale * 100), 100, 100, 70)} fill="none" stroke="rgba(0, 136, 255, 0.15)" strokeWidth="1" />
               ))}
-              {/* Axis Lines */}
+              {/* Axes */}
               {[0,1,2,3,4].map(i => {
                 const angle = (Math.PI * 2 * i / 5) - Math.PI / 2;
                 const x = 100 + 70 * Math.cos(angle);
                 const y = 100 + 70 * Math.sin(angle);
-                return <line key={i} x1="100" y1="100" x2={x} y2={y} stroke="rgba(255,255,255,0.06)" strokeWidth="1" />;
+                return <line key={i} x1="100" y1="100" x2={x} y2={y} stroke="rgba(0, 136, 255, 0.2)" strokeWidth="1" />;
               })}
-              {/* Data Polygon */}
+              
+              {/* Emotion Polygon */}
               <polygon
                 points={getRadarPoints([
                   emotion.scores.excited,
@@ -295,18 +391,20 @@ export default function ChatPage() {
                   emotion.scores.skeptical,
                   emotion.scores.frustrated
                 ], 100, 100, 70)}
-                fill="rgba(16,185,129,0.15)"
-                stroke="#10b981"
-                strokeWidth="2"
+                fill="rgba(0, 240, 255, 0.2)"
+                stroke="#00f0ff"
+                strokeWidth="1.5"
                 className="transition-all duration-700"
+                style={{ filter: 'drop-shadow(0 0 5px rgba(0, 240, 255, 0.5))' }}
               />
-              {/* Data Points */}
+              
+              {/* Data Points & Labels */}
               {[
-                { val: emotion.scores.excited, label: 'Excited' },
-                { val: emotion.scores.curious, label: 'Curious' },
-                { val: emotion.scores.neutral, label: 'Neutral' },
-                { val: emotion.scores.skeptical, label: 'Skeptical' },
-                { val: emotion.scores.frustrated, label: 'Frustrated' }
+                { val: emotion.scores.excited, label: 'EXCITED' },
+                { val: emotion.scores.curious, label: 'CURIOUS' },
+                { val: emotion.scores.neutral, label: 'NEUTRAL' },
+                { val: emotion.scores.skeptical, label: 'SKEPTICAL' },
+                { val: emotion.scores.frustrated, label: 'FRUSTRATED' }
               ].map((item, i) => {
                 const angle = (Math.PI * 2 * i / 5) - Math.PI / 2;
                 const r = (item.val / 100) * 70;
@@ -316,103 +414,79 @@ export default function ChatPage() {
                 const ly = 100 + 85 * Math.sin(angle);
                 return (
                   <g key={i}>
-                    <circle cx={px} cy={py} r="3" fill="#10b981" className="transition-all duration-700" />
-                    <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" fill="#9ca3af" fontSize="8" fontWeight="500">{item.label}</text>
+                    <circle cx={px} cy={py} r="2.5" fill="#fff" className="transition-all duration-700 shadow-[0_0_5px_#fff]" />
+                    <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" fill="#64748b" fontSize="7" fontFamily="monospace" letterSpacing="1">{item.label}</text>
                   </g>
                 );
               })}
             </svg>
-            <div className="text-center mt-2">
-              <span className={`text-xs font-bold px-2 py-0.5 rounded-full ${
-                emotion.dominant === 'excited' ? 'bg-green-500/20 text-green-400' :
-                emotion.dominant === 'curious' ? 'bg-blue-500/20 text-blue-400' :
-                emotion.dominant === 'skeptical' ? 'bg-yellow-500/20 text-yellow-400' :
-                emotion.dominant === 'frustrated' ? 'bg-red-500/20 text-red-400' :
-                'bg-gray-500/20 text-gray-400'
+            
+            <div className="text-center mt-6">
+              <span className={`text-[10px] uppercase font-mono tracking-widest px-3 py-1 rounded border ${
+                emotion.dominant === 'excited' ? 'bg-accent-success/10 text-accent-success border-accent-success/30' :
+                emotion.dominant === 'curious' ? 'bg-primary-500/10 text-primary-300 border-primary-500/30' :
+                emotion.dominant === 'skeptical' ? 'bg-secondary-500/10 text-secondary-300 border-secondary-500/30' :
+                emotion.dominant === 'frustrated' ? 'bg-accent-alert/10 text-accent-alert border-accent-alert/30' :
+                'bg-gray-800/50 text-gray-400 border-gray-700'
               }`}>
-                {emotion.dominant.charAt(0).toUpperCase() + emotion.dominant.slice(1)}
+                DOMINANT_STATE: {emotion.dominant}
               </span>
             </div>
           </div>
         </div>
-
-        {/* Chat Messages */}
-        <div className="flex-1 space-y-6">
-          {messages.map((msg, i) => (
-            <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'} animate-slide-up`}>
-              <div className={`max-w-[80%] md:max-w-[70%] p-4 rounded-2xl ${
-                msg.role === 'user' 
-                  ? 'bg-primary-600 text-white rounded-br-sm shadow-[0_0_20px_rgba(79,70,229,0.2)]' 
-                  : 'glass-panel text-gray-200 rounded-bl-sm border border-white/5'
-              }`}>
-                <p className="leading-relaxed text-sm md:text-base whitespace-pre-wrap">{msg.content}</p>
-              </div>
-            </div>
-          ))}
-          {isLoading && (
-            <div className="flex justify-start animate-fade-in">
-              <div className="glass-panel p-4 rounded-2xl rounded-bl-sm border border-white/5 flex gap-2">
-                <span className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" />
-                <span className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" style={{animationDelay: '0.2s'}} />
-                <span className="w-2 h-2 bg-primary-500 rounded-full animate-bounce" style={{animationDelay: '0.4s'}} />
-              </div>
-            </div>
-          )}
-          <div ref={messagesEndRef} />
-        </div>
-        </div>
       </main>
 
-      {/* Input Area */}
-      <footer className="p-4 glass-panel border-t border-white/5">
-        <div className="max-w-4xl mx-auto relative">
-          <form onSubmit={handleSend} className="relative flex items-center gap-2">
+      {/* Bottom Bar: Voice Interaction */}
+      <footer className="absolute bottom-0 w-full p-6 z-20 flex flex-col items-center justify-end bg-gradient-to-t from-[#050505] via-[#050505]/80 to-transparent h-48">
+        
+        {/* Waveform Visualizer */}
+        <div className="h-12 flex items-end gap-1 mb-4 opacity-80">
+          {(isListening || isLoading) && Array.from({length: 15}).map((_, i) => (
+            <div 
+              key={i} 
+              className={`w-1 rounded-t-sm ${isListening ? 'bg-accent-alert shadow-[0_0_10px_#ff4d00]' : 'bg-primary-400 shadow-[0_0_10px_#00b8ff]'} waveform-bar`} 
+              style={{ animationDelay: `${i * 0.1}s`, height: isListening ? '8px' : '4px' }}
+            />
+          ))}
+        </div>
+
+        <div className="w-full max-w-3xl relative flex items-center justify-center gap-4">
+          <form onSubmit={handleSend} className="w-full relative flex items-center group">
+            <input
+              type="text"
+              value={input}
+              onChange={(e) => setInput(e.target.value)}
+              placeholder="DATA_INPUT_STREAM..."
+              className="w-full bg-black/40 border border-primary-500/20 rounded-l-full rounded-r-full py-4 px-8 text-sm font-mono text-primary-100 placeholder-primary-500/40 focus:outline-none focus:border-primary-400 focus:bg-primary-900/10 transition-all shadow-[inset_0_0_20px_rgba(0,136,255,0.05)] pr-32"
+              disabled={isLoading}
+            />
+            
             <button
               type="button"
               onClick={toggleListening}
-              className={`p-4 rounded-full transition-all flex items-center justify-center ${
+              className={`absolute right-14 w-10 h-10 flex items-center justify-center rounded-full transition-all ${
                 isListening 
-                  ? 'bg-red-500 text-white animate-pulse shadow-[0_0_20px_rgba(239,68,68,0.5)]' 
-                  : 'glass-panel text-gray-400 hover:text-white border border-white/10 hover:border-white/20'
+                  ? 'bg-accent-alert text-white animate-pulse shadow-[0_0_15px_#ff4d00]' 
+                  : 'bg-primary-500/10 text-primary-400 hover:bg-primary-500/30'
               }`}
-              title="Voice Input"
             >
-              <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
-                <path strokeLinecap="round" strokeLinejoin="round" d="M12 18.75a6 6 0 006-6v-1.5m-6 7.5a6 6 0 01-6-6v-1.5m6 7.5v3.75m-3.75 0h7.5M12 15.75a3 3 0 01-3-3V4.5a3 3 0 116 0v8.25a3 3 0 01-3 3z" />
+              <FiMic />
+            </button>
+            
+            <button 
+              type="submit"
+              disabled={isLoading || !input.trim()}
+              className="absolute right-2 bg-primary-600 hover:bg-primary-500 disabled:bg-gray-800 disabled:text-gray-500 text-white w-10 h-10 rounded-full transition-colors flex items-center justify-center neon-border"
+            >
+              <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-4 h-4 translate-x-0.5">
+                <path d="M3.478 2.404a.75.75 0 00-.926.941l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.404z" />
               </svg>
             </button>
-            <div className="relative flex-1 flex items-center">
-              <input
-                type="text"
-                value={input}
-                onChange={(e) => setInput(e.target.value)}
-                placeholder={isListening ? "Listening..." : "Type your message in English, Hindi, or Hinglish..."}
-                className="w-full bg-gray-900/50 border border-white/10 rounded-full pl-6 pr-14 py-4 text-white placeholder-gray-500 focus:outline-none focus:ring-2 focus:ring-primary-500/50 focus:border-primary-500 transition-all"
-                disabled={isLoading}
-              />
-              <button 
-                type="submit"
-                disabled={isLoading || !input.trim()}
-                className="absolute right-2 bg-primary-600 hover:bg-primary-500 disabled:bg-gray-700 disabled:opacity-50 text-white p-2.5 rounded-full transition-colors flex items-center justify-center"
-              >
-                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" className="w-5 h-5">
-                  <path d="M3.478 2.404a.75.75 0 00-.926.941l2.432 7.905H13.5a.75.75 0 010 1.5H4.984l-2.432 7.905a.75.75 0 00.926.94 60.519 60.519 0 0018.445-8.986.75.75 0 000-1.218A60.517 60.517 0 003.478 2.404z" />
-                </svg>
-              </button>
-            </div>
           </form>
-          <div className="text-center mt-2 text-[10px] text-gray-500 relative">
-            {isListening && (
-              <div className="absolute -top-16 left-1/2 -translate-x-1/2 flex items-end gap-1 h-8 px-4 py-2 glass-panel rounded-full animate-fade-in border border-primary-500/50 shadow-[0_0_15px_rgba(16,185,129,0.3)]">
-                <div className="w-1 bg-primary-400 rounded-full waveform-bar" style={{animationDelay: '0.0s'}}></div>
-                <div className="w-1 bg-primary-400 rounded-full waveform-bar" style={{animationDelay: '0.2s'}}></div>
-                <div className="w-1 bg-primary-400 rounded-full waveform-bar" style={{animationDelay: '0.4s'}}></div>
-                <div className="w-1 bg-primary-400 rounded-full waveform-bar" style={{animationDelay: '0.1s'}}></div>
-                <div className="w-1 bg-primary-400 rounded-full waveform-bar" style={{animationDelay: '0.3s'}}></div>
-              </div>
-            )}
-            Powered by Saarthi.AI Voice & NLP Engine.
-          </div>
+        </div>
+        
+        <div className="text-[9px] uppercase tracking-widest text-primary-500/50 font-mono mt-4">
+          SAARTHI.AI // NEURAL_LINK_ACTIVE
         </div>
       </footer>
     </div>

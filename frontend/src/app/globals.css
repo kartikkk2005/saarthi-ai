@@ -1,48 +1,78 @@
 @import "tailwindcss";
 
 @theme {
-  /* Minimalist OLED Fintech Theme - Neon Mint & Warm Gold */
-  --color-primary-300: #6ee7b7;
-  --color-primary-400: #34d399;
-  --color-primary-500: #10b981;
-  --color-primary-600: #059669;
+  /* Cyberpunk / High-Tech Neon Theme */
+  --color-primary-300: #00f0ff; /* Cyan glow */
+  --color-primary-400: #00b8ff;
+  --color-primary-500: #0088ff; /* Electric blue base */
+  --color-primary-600: #0044ff;
   
-  --color-secondary-300: #fcd34d;
-  --color-secondary-400: #fbbf24;
-  --color-secondary-500: #f59e0b;
+  --color-secondary-300: #ff00ea; /* Neon purple/magenta */
+  --color-secondary-400: #d000ff;
+  --color-secondary-500: #9d00ff;
+  
+  --color-accent-alert: #ff4d00; /* Orange for alerts/objections */
+  --color-accent-success: #00ff88; /* Neon green for Hot leads */
 }
 
 @layer base {
   :root {
-    --background: #020408; /* Ultra-deep OLED-friendly blue-black */
-    --foreground: #f8fafc;
+    --background: #050505; /* Deep black for AI theme */
+    --foreground: #e2e8f0;
   }
   
   body {
     background-color: var(--background);
     color: var(--foreground);
-    background-image: radial-gradient(circle at top right, rgba(16, 185, 129, 0.05), transparent 40%),
-                      radial-gradient(circle at bottom left, rgba(245, 158, 11, 0.04), transparent 40%);
+    /* Subtle glowing ambient light in background */
+    background-image: 
+      radial-gradient(circle at 10% 20%, rgba(0, 136, 255, 0.05), transparent 40%),
+      radial-gradient(circle at 90% 80%, rgba(157, 0, 255, 0.05), transparent 40%);
+    overflow-x: hidden;
   }
 }
 
 @layer utilities {
   .glass-panel {
-    background: rgba(17, 24, 39, 0.6);
-    backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
+    background: rgba(10, 10, 12, 0.4);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(0, 240, 255, 0.1);
+    box-shadow: inset 0 0 20px rgba(0, 136, 255, 0.05);
+  }
+
+  .neon-border {
+    box-shadow: 0 0 10px rgba(0, 240, 255, 0.5), inset 0 0 10px rgba(0, 240, 255, 0.2);
+    border: 1px solid rgba(0, 240, 255, 0.8);
+  }
+
+  .neon-text {
+    text-shadow: 0 0 10px rgba(0, 240, 255, 0.8);
   }
   
+  /* Animations */
   .animate-fade-in {
-    animation: fadeIn 0.6s ease-out forwards;
+    animation: fadeIn 0.8s ease-out forwards;
   }
   
-  .animate-slide-up {
-    animation: slideUp 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  .animate-slide-right {
+    animation: slideRight 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+  }
+
+  .animate-slide-left {
+    animation: slideLeft 0.6s cubic-bezier(0.16, 1, 0.3, 1) forwards;
   }
   
-  .animate-pulse-slow {
-    animation: pulse 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  .animate-pulse-core {
+    animation: pulseCore 4s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+  }
+
+  .animate-core-active {
+    animation: coreActive 1.5s ease-in-out infinite alternate;
+  }
+
+  .animate-glitch {
+    animation: glitch 0.3s cubic-bezier(.25, .46, .45, .94) both infinite;
   }
   
   .waveform-bar {
@@ -55,27 +85,52 @@
   to { opacity: 1; }
 }
 
-@keyframes slideUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
+@keyframes slideRight {
+  from { opacity: 0; transform: translateX(-20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideLeft {
+  from { opacity: 0; transform: translateX(20px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes pulseCore {
+  0% { transform: scale(0.95); opacity: 0.8; box-shadow: 0 0 40px rgba(0, 136, 255, 0.4); }
+  50% { transform: scale(1.05); opacity: 1; box-shadow: 0 0 80px rgba(0, 240, 255, 0.6); }
+  100% { transform: scale(0.95); opacity: 0.8; box-shadow: 0 0 40px rgba(0, 136, 255, 0.4); }
+}
+
+@keyframes coreActive {
+  0% { transform: scale(1); filter: brightness(1); box-shadow: 0 0 60px rgba(0, 240, 255, 0.5); }
+  100% { transform: scale(1.15); filter: brightness(1.3); box-shadow: 0 0 120px rgba(0, 240, 255, 0.8), inset 0 0 40px rgba(255, 255, 255, 0.5); }
 }
 
 @keyframes waveform {
   0%, 100% { height: 8px; }
-  50% { height: 24px; }
+  50% { height: 32px; filter: drop-shadow(0 0 8px rgba(0, 240, 255, 0.8)); }
+}
+
+@keyframes glitch {
+  0% { transform: translate(0) }
+  20% { transform: translate(-2px, 2px) }
+  40% { transform: translate(-2px, -2px) }
+  60% { transform: translate(2px, 2px) }
+  80% { transform: translate(2px, -2px) }
+  100% { transform: translate(0) }
 }
 
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 8px;
+  width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: #020408; 
+  background: transparent; 
 }
 ::-webkit-scrollbar-thumb {
-  background: #1f2937; 
+  background: rgba(0, 136, 255, 0.3); 
   border-radius: 4px;
 }
 ::-webkit-scrollbar-thumb:hover {
-  background: #374151; 
+  background: rgba(0, 136, 255, 0.6); 
 }
