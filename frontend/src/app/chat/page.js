@@ -189,7 +189,7 @@ export default function ChatPage() {
   }));
 
   return (
-    <div className="h-screen w-screen overflow-hidden bg-[#0A0908] text-gray-200 relative flex flex-col font-sans">
+    <div className="h-screen w-screen overflow-hidden bg-[#FAFAFA] text-[#1D1D1F] relative flex flex-col font-sans">
       
       {/* Neural Network Background Layer */}
       <div className="absolute inset-0 pointer-events-none overflow-hidden opacity-30 z-0">
@@ -233,7 +233,7 @@ export default function ChatPage() {
 
       {/* Top Bar */}
       <header className="w-full p-6 flex justify-between items-center z-10 relative">
-        <Link href="/" className="text-2xl font-bold tracking-widest text-primary-300 neon-text flex items-center gap-3">
+        <Link href="/" className="text-2xl font-bold tracking-widest text-primary-600 flex items-center gap-3">
           <span className="text-xl">Saarthi.AI</span>
           <div className="h-1 w-1 rounded-full bg-primary-300 animate-pulse"></div>
         </Link>
@@ -255,7 +255,7 @@ export default function ChatPage() {
           
           <button 
             onClick={() => setShowSettings(!showSettings)}
-            className="p-2 text-primary-300 hover:text-white glass-panel rounded-lg border border-primary-500/30 transition-all neon-border"
+            className="p-2 text-primary-600 hover:text-primary-800 glass-panel rounded-lg border border-primary-500/30 transition-all shadow-sm"
           >
             <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" strokeWidth={1.5} stroke="currentColor" className="w-5 h-5">
               <path strokeLinecap="round" strokeLinejoin="round" d="M10.343 3.94c.09-.542.56-.94 1.11-.94h1.093c.55 0 1.02.398 1.11.94l.149.894c.07.424.384.764.78.93.398.164.855.142 1.205-.108l.737-.527a1.125 1.125 0 011.45.12l.773.774c.39.389.44 1.002.12 1.45l-.527.737c-.25.35-.272.806-.107 1.204.165.397.505.71.93.78l.893.15c.543.09.94.56.94 1.109v1.094c0 .55-.397 1.02-.94 1.11l-.893.149c-.425.07-.765.383-.93.78-.165.398-.143.854.107 1.204l.527.738c.32.447.269 1.06-.12 1.45l-.774.773a1.125 1.125 0 01-1.449.12l-.738-.527c-.35-.25-.806-.272-1.203-.107-.397.165-.71.505-.781.929l-.149.894c-.09.542-.56.94-1.11.94h-1.094c-.55 0-1.019-.398-1.11-.94l-.148-.894c-.071-.424-.384-.764-.781-.93-.398-.164-.854-.142-1.204.108l-.738.527c-.447.32-1.06.269-1.45-.12l-.773-.774a1.125 1.125 0 01-.12-1.45l.527-.737c.25-.35.273-.806.108-1.204-.165-.397-.505-.71-.93-.78l-.894-.15c-.542-.09-.94-.56-.94-1.109v-1.094c0-.55.398-1.02.94-1.11l.894-.149c.424-.07.765-.383.93-.78.165-.398.143-.854-.107-1.204l-.527-.738a1.125 1.125 0 01.12-1.45l.773-.773a1.125 1.125 0 011.45-.12l.737.527c.35.25.807.272 1.204.107.397-.165.71-.505.78-.929l.15-.894z" />
@@ -266,17 +266,17 @@ export default function ChatPage() {
 
         {/* Settings Panel */}
         {showSettings && (
-          <div className="absolute top-24 right-6 w-80 glass-panel border border-primary-500/50 rounded-lg p-5 z-50 animate-slide-left shadow-[0_0_30px_rgba(214,169,157,0.2)]">
-            <h3 className="text-primary-300 font-mono mb-4 text-xs tracking-widest flex items-center justify-between border-b border-primary-500/30 pb-2">
+          <div className="absolute top-24 right-6 w-80 glass-panel border border-primary-500/30 rounded-lg p-5 z-50 animate-slide-left shadow-lg">
+            <h3 className="text-primary-600 font-mono mb-4 text-xs tracking-widest flex items-center justify-between border-b border-primary-500/30 pb-2">
               SYSTEM_PREFERENCES
-              <button onClick={() => setShowSettings(false)} className="text-gray-400 hover:text-white"><FiX /></button>
+              <button onClick={() => setShowSettings(false)} className="text-gray-500 hover:text-gray-800"><FiX /></button>
             </h3>
             
             <div className="space-y-4">
               <div>
                 <label className="block text-[10px] uppercase tracking-wider text-gray-500 mb-2">Voice_Matrix</label>
                 <select 
-                  className="w-full bg-black/50 border border-primary-500/30 rounded p-2 text-xs text-primary-100 outline-none focus:border-primary-300"
+                  className="w-full bg-white/50 border border-primary-500/30 rounded p-2 text-xs text-gray-800 outline-none focus:border-primary-500 shadow-inner"
                   value={selectedVoiceURI}
                   onChange={(e) => setSelectedVoiceURI(e.target.value)}
                 >
@@ -304,7 +304,7 @@ export default function ChatPage() {
               <div className="pt-3">
                 <button 
                   onClick={() => speakResponse("System audio sequence initiated. All modules nominal.")}
-                  className="w-full glass-panel hover:bg-primary-600/20 border border-primary-500/30 rounded py-2 text-xs tracking-widest text-primary-300 transition-colors"
+                  className="w-full glass-panel hover:bg-primary-100 border border-primary-500/30 rounded py-2 text-xs tracking-widest text-primary-600 transition-colors shadow-sm"
                 >
                   <span className="flex items-center justify-center gap-2"><FiPlay /> RUN_DIAGNOSTIC</span>
                 </button>
@@ -322,10 +322,10 @@ export default function ChatPage() {
           <div className="overflow-y-auto pr-4 scroll-smooth space-y-6 flex-1 flex flex-col justify-end pb-4" style={{maskImage: 'linear-gradient(to bottom, transparent, black 15%, black)'}}>
             {messages.map((msg, i) => (
               <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end animate-slide-left' : 'justify-start animate-slide-right'}`}>
-                <div className={`relative max-w-[90%] p-4 rounded-lg text-sm md:text-base border ${
+                <div className={`relative max-w-[90%] p-4 rounded-lg text-sm md:text-base border shadow-sm ${
                   msg.role === 'user' 
-                    ? 'bg-primary-600/10 text-primary-100 border-primary-500/30 shadow-[0_0_15px_rgba(214,169,157,0.1)]' 
-                    : 'glass-panel text-gray-300 border-white/10'
+                    ? 'bg-primary-50 text-[#1D1D1F] border-primary-500/30' 
+                    : 'glass-panel text-gray-700 border-black/5'
                 }`}>
                   {/* Glowing connector line */}
                   <div className={`absolute top-1/2 -translate-y-1/2 w-8 h-[1px] ${msg.role === 'user' ? 'bg-primary-500/50 -right-8' : 'bg-white/20 -left-8'}`} />
@@ -361,10 +361,10 @@ export default function ChatPage() {
 
         {/* Right Side: Emotion Radar */}
         <div className="hidden lg:flex w-1/4 h-full flex-col justify-center items-end pr-10">
-          <div className="glass-panel rounded-xl border border-primary-500/20 p-6 w-full max-w-sm relative overflow-hidden">
+          <div className="glass-panel rounded-xl border border-primary-500/20 p-6 w-full max-w-sm relative overflow-hidden shadow-xl">
             <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-transparent via-primary-500 to-transparent opacity-50"></div>
             
-            <h3 className="text-[10px] uppercase tracking-[0.2em] text-primary-300 text-center mb-6 font-mono flex items-center justify-center gap-2">
+            <h3 className="text-[10px] uppercase tracking-[0.2em] text-primary-600 text-center mb-6 font-mono flex items-center justify-center gap-2">
               <span className="w-2 h-2 rounded bg-primary-400 animate-pulse"></span>
               Neural_State_Analysis
             </h3>
@@ -437,7 +437,7 @@ export default function ChatPage() {
       </main>
 
       {/* Bottom Bar: Voice Interaction */}
-      <footer className="absolute bottom-0 w-full p-6 z-20 flex flex-col items-center justify-end bg-gradient-to-t from-[#0A0908] via-[#0A0908]/80 to-transparent h-48">
+      <footer className="absolute bottom-0 w-full p-6 z-20 flex flex-col items-center justify-end bg-gradient-to-t from-[#FAFAFA] via-[#FAFAFA]/90 to-transparent h-48">
         
         {/* Waveform Visualizer */}
         <div className="h-12 flex items-end gap-1 mb-4 opacity-80">
@@ -457,7 +457,7 @@ export default function ChatPage() {
               value={input}
               onChange={(e) => setInput(e.target.value)}
               placeholder="DATA_INPUT_STREAM..."
-              className="w-full bg-black/40 border border-primary-500/20 rounded-l-full rounded-r-full py-4 px-8 text-sm font-mono text-primary-100 placeholder-primary-500/40 focus:outline-none focus:border-primary-400 focus:bg-primary-900/10 transition-all shadow-[inset_0_0_20px_rgba(214,169,157,0.05)] pr-32"
+              className="w-full bg-white border border-primary-500/30 rounded-l-full rounded-r-full py-4 px-8 text-sm font-mono text-gray-800 placeholder-gray-400 focus:outline-none focus:border-primary-500 focus:ring-4 focus:ring-primary-500/10 transition-all shadow-md pr-32"
               disabled={isLoading}
             />
             
@@ -466,8 +466,8 @@ export default function ChatPage() {
               onClick={toggleListening}
               className={`absolute right-14 w-10 h-10 flex items-center justify-center rounded-full transition-all ${
                 isListening 
-                  ? 'bg-accent-alert text-white animate-pulse shadow-[0_0_15px_#9F8772]' 
-                  : 'bg-primary-500/10 text-primary-400 hover:bg-primary-500/30'
+                  ? 'bg-accent-alert text-white animate-pulse shadow-[0_0_15px_rgba(159,135,114,0.5)]' 
+                  : 'bg-primary-100 text-primary-600 hover:bg-primary-200'
               }`}
             >
               <FiMic />
