@@ -232,7 +232,7 @@ export default function ChatPage() {
       </div>
 
       {/* Top Bar */}
-      <header className="w-full p-6 flex justify-between items-center z-10 relative">
+      <header className="w-full p-6 flex justify-between items-center z-50 relative">
         <Link href="/" className="text-2xl font-bold tracking-widest text-primary-600 flex items-center gap-3">
           <span className="text-xl">Saarthi.AI</span>
           <div className="h-1 w-1 rounded-full bg-primary-300 animate-pulse"></div>
@@ -325,7 +325,7 @@ export default function ChatPage() {
                 <div className={`relative max-w-[90%] p-4 rounded-lg text-sm md:text-base border shadow-sm ${
                   msg.role === 'user' 
                     ? 'bg-primary-50 text-[#1D1D1F] border-primary-500/30' 
-                    : 'glass-panel text-gray-700 border-black/5'
+                    : 'bg-white text-[#1D1D1F] border-gray-200'
                 }`}>
                   {/* Glowing connector line */}
                   <div className={`absolute top-1/2 -translate-y-1/2 w-8 h-[1px] ${msg.role === 'user' ? 'bg-primary-500/50 -right-8' : 'bg-white/20 -left-8'}`} />
@@ -369,17 +369,17 @@ export default function ChatPage() {
               Neural_State_Analysis
             </h3>
             
-            <svg viewBox="0 0 200 200" className="w-full drop-shadow-[0_0_15px_rgba(214,169,157,0.3)]">
+            <svg viewBox="0 0 200 200" className="w-full drop-shadow-md">
               {/* Radar Grids */}
               {[1, 0.66, 0.33].map((scale, si) => (
-                <polygon key={si} points={getRadarPoints(Array(5).fill(scale * 100), 100, 100, 70)} fill="none" stroke="rgba(214, 169, 157, 0.15)" strokeWidth="1" />
+                <polygon key={si} points={getRadarPoints(Array(5).fill(scale * 100), 100, 100, 70)} fill="none" stroke="rgba(214, 169, 157, 0.3)" strokeWidth="1" />
               ))}
               {/* Axes */}
               {[0,1,2,3,4].map(i => {
                 const angle = (Math.PI * 2 * i / 5) - Math.PI / 2;
                 const x = 100 + 70 * Math.cos(angle);
                 const y = 100 + 70 * Math.sin(angle);
-                return <line key={i} x1="100" y1="100" x2={x} y2={y} stroke="rgba(214, 169, 157, 0.2)" strokeWidth="1" />;
+                return <line key={i} x1="100" y1="100" x2={x} y2={y} stroke="rgba(214, 169, 157, 0.4)" strokeWidth="1" />;
               })}
               
               {/* Emotion Polygon */}
@@ -414,8 +414,8 @@ export default function ChatPage() {
                 const ly = 100 + 85 * Math.sin(angle);
                 return (
                   <g key={i}>
-                    <circle cx={px} cy={py} r="2.5" fill="#FFEDE1" className="transition-all duration-700 shadow-[0_0_5px_#FFEDE1]" />
-                    <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" fill="#64748b" fontSize="7" fontFamily="monospace" letterSpacing="1">{item.label}</text>
+                    <circle cx={px} cy={py} r="2.5" fill="#D6A99D" className="transition-all duration-700 shadow-sm" />
+                    <text x={lx} y={ly} textAnchor="middle" dominantBaseline="middle" fill="#1D1D1F" fontSize="8" fontWeight="bold" fontFamily="monospace" letterSpacing="1">{item.label}</text>
                   </g>
                 );
               })}

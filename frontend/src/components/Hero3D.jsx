@@ -1,7 +1,7 @@
 "use client";
 
-import { Canvas } from "@react-three/fiber";
-import { MeshDistortMaterial, Environment, Float, Sparkles, OrbitControls, ContactShadows } from "@react-three/drei";
+import { Canvas, useFrame } from "@react-three/fiber";
+import { MeshDistortMaterial, Environment, Float, OrbitControls, ContactShadows, Stars } from "@react-three/drei";
 import { Suspense } from "react";
 
 export default function Hero3D() {
@@ -48,7 +48,7 @@ export default function Hero3D() {
             </mesh>
           </Float>
 
-          <Sparkles count={150} scale={12} size={3} speed={0.4} opacity={0.4} color="#9F8772" />
+          <Stars radius={50} depth={50} count={2500} factor={4} saturation={0} fade speed={1} />
           
           <Environment preset="studio" />
         </Suspense>
