@@ -108,17 +108,17 @@ function ConnectionLines({ count = 100 }) {
   );
 }
 
-// Floating coin (torus = ring shape)
+// Floating flat coin (cylinder)
 function FloatingCoin() {
   const ref = useRef();
   useFrame((state) => {
-    ref.current.rotation.x = Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
+    ref.current.rotation.x = Math.PI / 2 + Math.sin(state.clock.elapsedTime * 0.5) * 0.2;
     ref.current.rotation.z += 0.01;
   });
   return (
     <Float speed={1.5} rotationIntensity={1} floatIntensity={2}>
       <mesh ref={ref} position={[0, 0, 0]} scale={1.1}>
-        <torusGeometry args={[1, 0.35, 32, 64]} />
+        <cylinderGeometry args={[1, 1, 0.12, 64]} />
         <meshStandardMaterial
           color="#F2D0A9"
           metalness={0.95}
