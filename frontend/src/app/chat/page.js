@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useRef, useEffect } from 'react';
+import { useState, useRef, useEffect, useMemo } from 'react';
 import Link from 'next/link';
 import { FiX, FiPlay, FiMic } from 'react-icons/fi';
 
@@ -129,7 +129,7 @@ export default function ChatPage() {
     setIsLoading(true);
 
     try {
-      const response = await fetch('http://localhost:8080/chat', {
+      const response = await fetch('http://localhost:8000/chat', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ message: messageText, session_id: sessionId }),
@@ -180,13 +180,24 @@ export default function ChatPage() {
     }).join(' ');
   };
 
-  // Background Neural Nodes Generation
-  const nodes = Array.from({ length: 20 }).map((_, i) => ({
-    x: Math.random() * 100,
-    y: Math.random() * 100,
-    size: Math.random() * 4 + 2,
-    delay: Math.random() * 5
-  }));
+  // Background Neural Nodes Generation (deterministic to avoid SSR hydration mismatch)
+  const nodes = useMemo(() => {
+    // Simple seeded pseudo-random to produce identical values on server & client
+    const seed = (s) => {
+      let v = s;
+      return () => {
+        v = (v * 16807 + 0) % 2147483647;
+        return (v - 1) / 2147483646;
+      };
+    };
+    const rng = seed(42);
+    return Array.from({ length: 20 }).map(() => ({
+      x: rng() * 100,
+      y: rng() * 100,
+      size: rng() * 4 + 2,
+      delay: rng() * 5
+    }));
+  }, []);
 
   return (
     <div className="h-screen w-screen overflow-hidden bg-[#FAFAFA] text-[#1D1D1F] relative flex flex-col font-sans">
