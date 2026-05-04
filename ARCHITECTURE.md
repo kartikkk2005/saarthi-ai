@@ -59,6 +59,7 @@ graph TD
 
 ### 🗄️ Database (MongoDB)
 * **Session Memory (`services/session_store.py`)**: Every chat assigns a unique `session_id`. All messages, intent scores, and metadata are appended to the document, allowing users to drop off and return later seamlessly.
+* **Memory Summaries**: For long conversations, compressed memory summaries are stored as a `memory_summary` field on the session document, ensuring context persists across sessions without re-processing the full history.
 
 ---
 
@@ -104,7 +105,60 @@ graph LR
 
 ---
 
-## 6. API Reference
+## 6. Conversation Memory & Context System
+
+The Conversation Memory system (`services/memory.py`) ensures the AI agent never "forgets" what the user said earlier. This is critical for natural, multi-turn conversations where the user shares personal information (name, location, preferences) early on and expects the agent to remember it.
+
+### How It Works
+
+| Conversation Length | Strategy | What Happens |
+|---|---|---|
+| ≤ 20 messages | **Full Context** | All messages sent directly to Gemini as conversation history |
+| > 20 messages | **Summary + Recent** | Older messages compressed into a memory summary; only last 20 sent as full context |
+| > 25 messages | **Auto Re-summarize** | Memory summary refreshed every 10 messages to stay current |
+
+### Architecture
+
+```mermaid
+sequenceDiagram
+    participant User
+    participant ConversationService as conversation.py
+    participant MemoryManager as memory.py
+    participant SessionStore as session_store.py
+    participant GeminiLLM as llm.py
+    participant MongoDB
+
+    User->>ConversationService: New message
+    ConversationService->>SessionStore: get_session(session_id)
+    SessionStore->>MongoDB: Find session
+    MongoDB-->>SessionStore: Session doc (messages[], memory_summary)
+    SessionStore-->>ConversationService: Session with history
+
+    ConversationService->>MemoryManager: build_context(messages, existing_summary)
+    alt Short conversation (≤20 msgs)
+        MemoryManager-->>ConversationService: All messages as recent_messages
+    else Long conversation (>20 msgs)
+        MemoryManager-->>ConversationService: Last 20 as recent + older_messages for summarization
+        ConversationService->>GeminiLLM: generate_memory_summary(older_messages)
+        GeminiLLM-->>ConversationService: Compressed summary
+        ConversationService->>SessionStore: update_memory_summary()
+    end
+
+    ConversationService->>GeminiLLM: generate_response(msg, lang, history, tone, memory_summary)
+    Note over GeminiLLM: System prompt includes:<br/>1. Memory summary (if any)<br/>2. Tone adaptation<br/>3. Recent messages<br/>4. Current user message
+    GeminiLLM-->>ConversationService: Context-aware response
+```
+
+### What Gets Remembered
+The memory system captures and preserves:
+* **Personal details**: Name, location, company, role
+* **Preferences**: Budget, interests, requirements
+* **Decisions**: What the user agreed to, objections raised
+* **Conversation flow**: Topics discussed, questions asked
+
+---
+
+## 7. API Reference
 
 | Method | Endpoint | Description | Returns |
 |--------|----------|-------------|---------|
@@ -116,7 +170,7 @@ graph LR
 
 ---
 
-## 7. Folder Structure
+## 8. Folder Structure
 ```text
 sarti-ai-hacakethon/
 │
@@ -135,12 +189,13 @@ sarti-ai-hacakethon/
 │   │   ├── leads.py            # Summary Generation & Routing
 │   │   └── schemas.py          # Pydantic Request/Response Models
 │   ├── services/
-│   │   ├── llm.py              # Gemini 3 Flash Integration
+│   │   ├── llm.py              # Gemini 3 Flash Integration (with memory)
+│   │   ├── memory.py           # Conversation Memory & Context Manager
 │   │   ├── emotion.py          # 5-Axis Emotion Detection Engine
 │   │   ├── lead_scorer.py      # Math-based intent evaluation
 │   │   ├── language.py         # Hindi/Hinglish/English detection
-│   │   ├── conversation.py     # Orchestration pipeline
-│   │   └── session_store.py    # MongoDB Async connector
+│   │   ├── conversation.py     # Orchestration pipeline (memory-aware)
+│   │   └── session_store.py    # MongoDB Async connector + Memory persistence
 │   ├── data/
 │   │   └── objections.json     # Anti-hallucination KB
 │   └── .env                    # Secrets (MongoDB URL, Gemini API Key)

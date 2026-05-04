@@ -1,8 +1,10 @@
 import os
+from typing import List, Dict, Any, Optional
 from google import genai
 from google.genai import types
 from config import settings
 from services.objection_handler import objection_handler
+from services.memory import memory_manager
 
 class GeminiLLM:
     """A real LLM integration using Gemini 3 Flash Preview."""
@@ -26,8 +28,70 @@ class GeminiLLM:
                 print(f"Warning: Failed to initialize Gemini Client: {e}")
         return self._client
 
-    def generate_response(self, message: str, language: str) -> str:
-        """Generates a contextual response using Gemini or Objections KB."""
+    def _build_contents(
+        self,
+        message: str,
+        language: str,
+        history: Optional[List[Dict[str, Any]]] = None,
+        tone: str = "",
+        memory_summary: Optional[str] = None,
+    ) -> list:
+        """
+        Builds the full `contents` list for Gemini, including:
+        1. System prompt (with memory summary + tone adaptation)
+        2. Conversation history (recent messages)
+        3. Current user message
+        """
+        # Build the memory context block
+        memory_context = memory_manager.build_memory_prompt(memory_summary)
+
+        # Build system prompt with memory + tone
+        system_prompt = f"""You are Saarthi.AI, a conversational agent for Rupeezy.
+Your goal is to onboard Authorized Persons (APs) / Partners.
+Respond in a friendly, professional manner.
+Keep your response concise (1-3 sentences max).
+The user is communicating in '{language}' (en, hi, or hi-en). Match their language.
+{memory_context}
+{f"TONE ADAPTATION: {tone}" if tone else ""}
+
+IMPORTANT RULES:
+- Remember and reference information the user shared earlier in the conversation.
+- If the user told you their name, use it naturally.
+- Never ask for information the user already provided.
+- Build on previous topics discussed in the conversation."""
+
+        contents = [system_prompt]
+
+        # Add conversation history
+        if history:
+            for msg in history:
+                role = msg.get("role", "user").upper()
+                content = msg.get("content", "")
+                contents.append(f"{role}: {content}")
+
+        # Add current user message
+        contents.append(f"USER: {message}")
+
+        return contents
+
+    def generate_response(
+        self,
+        message: str,
+        language: str,
+        history: Optional[List[Dict[str, Any]]] = None,
+        tone: str = "",
+        memory_summary: Optional[str] = None,
+    ) -> str:
+        """
+        Generates a contextual response using Gemini with full conversation memory.
+        
+        Args:
+            message: The current user message.
+            language: Detected language code (en, hi, hi-en).
+            history: List of past message dicts [{role, content, timestamp}, ...].
+            tone: Tone adaptation instruction based on detected emotion.
+            memory_summary: Compressed summary of older conversation (for long chats).
+        """
         
         # Phase 5: Check for specific objections using the Knowledge Base first
         # (We keep this to ensure immediate, deterministic handling of core objections)
@@ -38,19 +102,20 @@ class GeminiLLM:
         # Fallback to Gemini for dynamic conversational responses
         if not self.client:
             return "Sorry, the AI engine is currently misconfigured. Please check the API key."
-            
-        system_prompt = f"""
-        You are Saarthi.AI, a conversational agent for Rupeezy.
-        Your goal is to onboard Authorized Persons (APs) / Partners.
-        Respond in a friendly, professional manner.
-        Keep your response concise (1-2 sentences max).
-        The user is communicating in '{language}' (en, hi, or hi-en). Match their language.
-        """
         
+        # Build full contents with history and memory
+        contents = self._build_contents(
+            message=message,
+            language=language,
+            history=history,
+            tone=tone,
+            memory_summary=memory_summary,
+        )
+            
         try:
             response = self.client.models.generate_content(
                 model="gemini-3-flash-preview",
-                contents=[system_prompt, f"User: {message}"]
+                contents=contents
             )
             return response.text.strip()
         except Exception as e:
@@ -66,7 +131,7 @@ class GeminiLLM:
                 try:
                     response = self.client.models.generate_content(
                         model="gemini-3-flash-preview",
-                        contents=[system_prompt, f"User: {message}"]
+                        contents=contents
                     )
                     return response.text.strip()
                 except Exception as retry_err:
@@ -74,6 +139,29 @@ class GeminiLLM:
             else:
                 print(f"Gemini API Error: {e}")
             return "I'm currently experiencing high demand. Please try again in a few seconds."
+
+    def generate_memory_summary(self, older_messages: List[Dict[str, Any]]) -> Optional[str]:
+        """
+        Uses Gemini to compress older messages into a concise summary.
+        This summary preserves key facts (names, preferences, decisions)
+        so the agent can reference them even when the full history is trimmed.
+        """
+        if not self.client or not older_messages:
+            return None
+
+        prompt = memory_manager.format_summary_prompt(older_messages)
+
+        try:
+            response = self.client.models.generate_content(
+                model="gemini-3-flash-preview",
+                contents=[prompt]
+            )
+            summary = response.text.strip()
+            print(f"[MEMORY] Generated summary ({len(summary)} chars) for {len(older_messages)} older messages")
+            return summary
+        except Exception as e:
+            print(f"[MEMORY-ERROR] Failed to generate summary: {e}")
+            return None
 
     def summarize_transcript(self, messages: list) -> str:
         """Generates a structured post-call summary of a chat transcript."""
