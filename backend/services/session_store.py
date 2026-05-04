@@ -68,4 +68,25 @@ class SessionStore:
             }
         )
 
+    async def get_messages(self, session_id: str) -> list:
+        """Retrieves the message history for a session."""
+        session = await self.get_session(session_id)
+        if not session:
+            return []
+        return session.get("messages", [])
+
+    async def update_memory_summary(self, session_id: str, summary: str) -> None:
+        """Persists a compressed memory summary for long conversations."""
+        now = datetime.now(timezone.utc).isoformat()
+        db = database.get_db()
+        await db.sessions.update_one(
+            {"session_id": session_id},
+            {
+                "$set": {
+                    "memory_summary": summary,
+                    "updated_at": now
+                }
+            }
+        )
+
 session_store = SessionStore()

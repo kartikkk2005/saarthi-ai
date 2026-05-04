@@ -32,7 +32,13 @@ We successfully built a production-ready prototype that executes the entire part
 ### 5. 🎭 Live Emotion Radar (Unique Feature)
 * **5-Axis Emotional Detection**: Every user message is analyzed across 5 emotional dimensions: Excited, Curious, Skeptical, Frustrated, and Neutral.
 * **Real-Time SVG Radar Chart**: A live pentagon chart on the chat sidebar morphs and animates as the user's emotional state changes turn-by-turn.
-* **Tone Adaptation**: The dominant detected emotion can instruct the AI to adjust its conversational style (e.g., soften tone when frustration is detected).
+* **Tone Adaptation**: The dominant detected emotion instructs the AI to adjust its conversational style (e.g., soften tone when frustration is detected).
+
+### 7. 🧠 Conversation Memory & Context Awareness
+* **Multi-Turn Memory**: The AI agent now remembers everything discussed in the conversation — names, preferences, questions, decisions — across unlimited messages. No more "I don't know your name" after the user already introduced themselves.
+* **Automatic Summarization**: For long conversations (20+ messages), older messages are automatically compressed into a concise memory summary using Gemini, preserving key facts while staying within token limits.
+* **Tone-Adapted Responses**: The detected emotion feeds directly into the LLM's system prompt, so the AI dynamically adjusts its tone (enthusiastic for excited users, gentle for frustrated ones).
+* **Persistent Memory**: Memory summaries are stored in MongoDB alongside the session, so context survives even if the user drops off and returns later.
 
 ### 6. 🎙️ Voice Visualizer
 * **Animated Waveform**: When the user activates the microphone, a dynamic CSS waveform animation appears, providing visual feedback that the AI is listening — similar to Siri or Google Assistant.
@@ -42,7 +48,8 @@ We successfully built a production-ready prototype that executes the entire part
 ## 🏗️ Technical Stack
 * **AI Engine**: Google Gemini `gemini-3-flash-preview` via `google-genai` SDK
 * **Backend**: FastAPI + Python
-* **Database**: MongoDB (motor async driver) for Multi-Turn Session Memory
+* **Memory**: MemoryManager with automatic context building & long-conversation summarization
+* **Database**: MongoDB (motor async driver) for Multi-Turn Session Memory & Memory Summaries
 * **Frontend**: Next.js 16 (Turbopack) + TailwindCSS Glassmorphism UI
 * **Orchestration**: `concurrently` (Runs both servers with a single command)
 
