@@ -21,15 +21,15 @@ export default function ChatPage() {
   // STT Language Selection
   const [sttLanguage, setSttLanguage] = useState('en-IN');
   const sttLanguageOptions = [
-    { code: 'en-IN', label: 'English (IN)' },
-    { code: 'hi-IN', label: 'Hindi' },
-    { code: 'hi-IN', label: 'Hinglish' }, // Using hi-IN for Hinglish speech recognition as well
-    { code: 'kn-IN', label: 'Kannada (ಕನ್ನಡ)' },
-    { code: 'ta-IN', label: 'Tamil' },
-    { code: 'te-IN', label: 'Telugu' },
-    { code: 'mr-IN', label: 'Marathi' },
-    { code: 'gu-IN', label: 'Gujarati' },
-    { code: 'bn-IN', label: 'Bengali' },
+    { id: 'en-IN', code: 'en-IN', label: 'English (IN)' },
+    { id: 'hi-IN', code: 'hi-IN', label: 'Hindi' },
+    { id: 'hinglish', code: 'hi-IN', label: 'Hinglish' }, // Unique ID, but uses hi-IN code for recognition
+    { id: 'kn-IN', code: 'kn-IN', label: 'Kannada (ಕನ್ನಡ)' },
+    { id: 'ta-IN', code: 'ta-IN', label: 'Tamil' },
+    { id: 'te-IN', code: 'te-IN', label: 'Telugu' },
+    { id: 'mr-IN', code: 'mr-IN', label: 'Marathi' },
+    { id: 'gu-IN', code: 'gu-IN', label: 'Gujarati' },
+    { id: 'bn-IN', code: 'bn-IN', label: 'Bengali' },
   ];
   
   // Emotion Radar State
@@ -71,30 +71,22 @@ export default function ChatPage() {
 
   // Handle Speech Synthesis (TTS)
   const speakResponse = (text) => {
-    // Auto-detect language from response text for proper TTS
-    const hasKannada = /[\u0C80-\u0CFF]/.test(text);
-    const hasHindi = /[\u0900-\u097F]/.test(text);
-    
-    // Windows/Browsers often lack native Kannada/Hindi voices.
-    // Use Google Translate's unofficial TTS endpoint for perfect local language pronunciation.
-    if (hasKannada) {
-      const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=kn&client=tw-ob`);
-      audio.playbackRate = speechRate;
-      audio.play().catch(e => console.error("TTS Audio Play failed", e));
-      return;
-    } else if (hasHindi) {
-      const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=hi&client=tw-ob`);
-      audio.playbackRate = speechRate;
-      audio.play().catch(e => console.error("TTS Audio Play failed", e));
-      return;
-    }
-
-    // Fallback to Web Speech API for English
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
       
-      if (selectedVoiceURI) {
+      const hasKannada = /[\u0C80-\u0CFF]/.test(text);
+      const hasHindi = /[\u0900-\u097F]/.test(text);
+      
+      if (hasKannada) {
+        utterance.lang = 'kn-IN';
+        const knVoice = availableVoices.find(v => v.lang.includes('kn') || v.name.toLowerCase().includes('kannada'));
+        if (knVoice) utterance.voice = knVoice;
+      } else if (hasHindi) {
+        utterance.lang = 'hi-IN';
+        const hiVoice = availableVoices.find(v => v.lang.includes('hi') || v.name.toLowerCase().includes('hindi'));
+        if (hiVoice) utterance.voice = hiVoice;
+      } else if (selectedVoiceURI) {
         const chosenVoice = availableVoices.find(v => v.voiceURI === selectedVoiceURI);
         if (chosenVoice) utterance.voice = chosenVoice;
       }
@@ -120,7 +112,8 @@ export default function ChatPage() {
     }
 
     const recognition = new SpeechRecognition();
-    recognition.lang = sttLanguage;
+    const selectedOption = sttLanguageOptions.find(opt => opt.id === sttLanguage);
+    recognition.lang = selectedOption ? selectedOption.code : 'en-IN';
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
@@ -353,7 +346,7 @@ export default function ChatPage() {
                   onChange={(e) => setSttLanguage(e.target.value)}
                 >
                   {sttLanguageOptions.map((opt) => (
-                    <option key={opt.label} value={opt.code}>{opt.label}</option>
+                    <option key={opt.id} value={opt.id}>{opt.label}</option>
                   ))}
                 </select>
               </div>
@@ -526,7 +519,7 @@ export default function ChatPage() {
               title="Speech Recognition Language"
             >
               {sttLanguageOptions.map((opt) => (
-                <option key={opt.label} value={opt.code}>{opt.label}</option>
+                <option key={opt.id} value={opt.id}>{opt.label}</option>
               ))}
             </select>
 
