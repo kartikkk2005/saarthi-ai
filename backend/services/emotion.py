@@ -20,7 +20,10 @@ EMOTION_SIGNALS = {
             "yes", "great", "amazing", "interested", "join", "sign up", "love",
             "perfect", "definitely", "absolutely", "wow", "fantastic", "start",
             "ready", "let's go", "sounds good", "impressive", "haan", "bahut accha",
-            "zaroor", "mujhe chahiye", "karna hai"
+            "zaroor", "mujhe chahiye", "karna hai",
+            # Kannada
+            "houdu", "tumba chennagi", "adbhuta", "serkolli", "shuru", "beku",
+            "ಹೌದು", "ಅದ್ಭುತ", "ಸೇರಿಕೊಳ್ಳಿ", "ತುಂಬಾ ಚೆನ್ನಾಗಿ", "ಖಂಡಿತ", "ಆಸಕ್ತಿ"
         ],
         "weight": 18
     },
@@ -28,7 +31,10 @@ EMOTION_SIGNALS = {
         "keywords": [
             "how", "what", "tell me", "explain", "details", "more", "?",
             "kaise", "kya", "kitna", "batao", "samjhao", "process", "commission",
-            "brokerage", "portal", "payout", "requirements", "eligibility"
+            "brokerage", "portal", "payout", "requirements", "eligibility",
+            # Kannada
+            "hege", "yenu", "heli", "vivarisiri", "eshtu", "yavaga", "hengiddu",
+            "ಹೇಗೆ", "ಏನು", "ಹೇಳಿ", "ವಿವರಿಸಿ", "ಎಷ್ಟು", "ಯಾವಾಗ"
         ],
         "weight": 12
     },
@@ -37,7 +43,10 @@ EMOTION_SIGNALS = {
             "but", "really", "sure", "trust", "guarantee", "proof", "compare",
             "better", "why should", "doubt", "confused", "not sure", "risky",
             "lekin", "sach mein", "pakka", "bharosa", "competitor", "zerodha",
-            "groww", "angel", "difference"
+            "groww", "angel", "difference",
+            # Kannada
+            "aadre", "nijvaa", "nambike", "khaatri", "saabithi", "yake",
+            "ಆದರೆ", "ನಿಜವಾ", "ನಂಬಿಕೆ", "ಖಾತ್ರಿ", "ಸಾಬೀತಿ", "ಯಾಕೆ"
         ],
         "weight": 15
     },
@@ -45,7 +54,10 @@ EMOTION_SIGNALS = {
         "keywords": [
             "no", "stop", "busy", "later", "waste", "scam", "spam", "annoying",
             "don't call", "not interested", "leave me", "enough", "bad", "worst",
-            "nahi", "band karo", "mat karo", "bakwas", "time waste", "pareshan"
+            "nahi", "band karo", "mat karo", "bakwas", "time waste", "pareshan",
+            # Kannada
+            "illa", "beda", "nillisi", "hogri", "kelsa illa", "toreyisi", "kedu",
+            "ಇಲ್ಲ", "ಬೇಡ", "ನಿಲ್ಲಿಸಿ", "ಹೋಗ್ರಿ", "ಕೆಲಸ ಇಲ್ಲ"
         ],
         "weight": 20
     }

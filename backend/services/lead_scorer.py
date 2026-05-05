@@ -6,8 +6,19 @@ class LeadScorer:
     """
 
     def __init__(self):
-        self.interest_signals = ['interested', 'yes', 'tell me more', 'how', 'join', 'commission', 'partner', 'haan', 'batao', 'accha']
-        self.rejection_signals = ['no', 'not interested', 'nahi', 'already', 'stop', 'busy']
+        self.interest_signals = [
+            'interested', 'yes', 'tell me more', 'how', 'join', 'commission', 'partner',
+            'haan', 'batao', 'accha',
+            # Kannada
+            'houdu', 'heli', 'beku', 'serkolli', 'asakti', 'chennagi',
+            'ಹೌದು', 'ಹೇಳಿ', 'ಬೇಕು', 'ಸೇರಿಕೊಳ್ಳಿ', 'ಆಸಕ್ತಿ', 'ಚೆನ್ನಾಗಿ'
+        ]
+        self.rejection_signals = [
+            'no', 'not interested', 'nahi', 'already', 'stop', 'busy',
+            # Kannada
+            'illa', 'beda', 'asakti illa', 'nillisi',
+            'ಇಲ್ಲ', 'ಬೇಡ', 'ಆಸಕ್ತಿ ಇಲ್ಲ', 'ನಿಲ್ಲಿಸಿ'
+        ]
 
     def calculate_score_delta(self, message: str) -> int:
         """Calculate the score change based on the current message."""

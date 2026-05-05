@@ -1,6 +1,6 @@
 {
   "already_have_broker": {
-    "keywords": ["already", "broker", "hai mera", "dusra", "pehle se", "existing"],
+    "keywords": ["already", "broker", "hai mera", "dusra", "pehle se", "existing", "iddare", "ಈಗಾಗಲೇ", "ಬ್ರೋಕರ್"],
     "responses": {
       "en": [
         "I understand you already have a broker. Rupeezy offers higher brokerage sharing and advanced trading tools. Would you like to compare?",
@@ -13,11 +13,19 @@
       "hi": [
         "मैं समझता हूँ कि आपका पहले से एक ब्रोकर है। लेकिन रुपीज़ी में आपको बेहतर ब्रोकरेज शेयरिंग मिलेगी। क्या आप तुलना करना चाहेंगे?",
         "हमारे कई पार्टनर्स ने बेहतर रेवेन्यू शेयर के लिए हमारे साथ शुरुआत की है। क्या मैं जानकारी साझा करूँ?"
+      ],
+      "kn": [
+        "ನಿಮಗೆ ಈಗಾಗಲೇ ಬ್ರೋಕರ್ ಇದ್ದಾರೆ ಎಂದು ನನಗೆ ಅರ್ಥವಾಗುತ್ತದೆ. ಆದರೆ Rupeezy ನಲ್ಲಿ ನಿಮಗೆ ಹೆಚ್ಚಿನ ಬ್ರೋಕರೇಜ್ ಶೇರಿಂಗ್ ಮತ್ತು ಉತ್ತಮ ಟ್ರೇಡಿಂಗ್ ಟೂಲ್ಸ್ ಸಿಗುತ್ತವೆ. ಹೋಲಿಕೆ ಮಾಡಿ ನೋಡುವಿರಾ?",
+        "ನಮ್ಮ ಅನೇಕ ಪಾರ್ಟ್ನರ್ಸ್ ಉತ್ತಮ ರೆವೆನ್ಯೂ ಶೇರ್ ಗಾಗಿ ಬೇರೆ ಬ್ರೋಕರ್ ಗಳಿಂದ ಬಂದಿದ್ದಾರೆ. ನಾನು ವಿವರಗಳನ್ನು ಹಂಚಿಕೊಳ್ಳಲೇ?"
+      ],
+      "kn-en": [
+        "Nimge already broker iddare, naanu arthamaadkotini. Aadre Rupeezy alli brokerage sharing zyaasti siguttade mattu tech tools tumba chennaagive. Compare maadi nodtira?",
+        "Namma tumba partners bere brokers inda banddiddare, yaakandre namma revenue share tumba better aagiide. Details share maadla?"
       ]
     }
   },
   "low_commission": {
-    "keywords": ["commission", "paisa", "kam", "profit", "low", "share"],
+    "keywords": ["commission", "paisa", "kam", "profit", "low", "share", "ಕಮಿಷನ್", "ಹಣ", "ಕಡಿಮೆ"],
     "responses": {
       "en": [
         "Rupeezy actually offers one of the most competitive revenue sharing models in the market, going up to 70% based on your volume. Should I send the slab details?",
@@ -30,11 +38,19 @@
       "hi": [
         "रुपीज़ी बाज़ार में सबसे प्रतिस्पर्धी रेवेन्यू शेयर देता है, जो आपके वॉल्यूम के आधार पर 70% तक जाता है। क्या मैं स्लैब का विवरण भेजूँ?",
         "पारदर्शी भुगतान संरचनाओं के कारण हमारे भागीदार काफी अधिक कमाते हैं। क्या आप अनुमान देखना चाहेंगे?"
+      ],
+      "kn": [
+        "Rupeezy ಮಾರುಕಟ್ಟೆಯಲ್ಲಿ ಅತ್ಯಂತ ಸ್ಪರ್ಧಾತ್ಮಕ ರೆವೆನ್ಯೂ ಶೇರಿಂಗ್ ನೀಡುತ್ತದೆ, ನಿಮ್ಮ ವಾಲ್ಯೂಮ್ ಆಧಾರದ ಮೇಲೆ 70% ವರೆಗೆ ಹೋಗುತ್ತದೆ. ನಾನು ಸ್ಲ್ಯಾಬ್ ವಿವರಗಳನ್ನು ಕಳುಹಿಸಲೇ?",
+        "ಪಾರದರ್ಶಕ ಪಾವತಿ ವ್ಯವಸ್ಥೆಯಿಂದಾಗಿ ನಮ್ಮ ಪಾರ್ಟ್ನರ್ಸ್ ಗಣನೀಯವಾಗಿ ಹೆಚ್ಚು ಗಳಿಸುತ್ತಾರೆ. ಗಳಿಕೆಯ ಅಂದಾಜು ನೋಡಬೇಕಾ?"
+      ],
+      "kn-en": [
+        "Rupeezy market alli most competitive revenue sharing model koduttade, volume mele 70% varegu hoguttade. Naan slab details kaluhisla?",
+        "Namma partners transparent payouts inda tumba jaasti earn maadtaare. Ond earnings estimate nodbeeka?"
       ]
     }
   },
   "no_time": {
-    "keywords": ["time", "busy", "waqt", "samay", "fursat", "bad mein", "later"],
+    "keywords": ["time", "busy", "waqt", "samay", "fursat", "bad mein", "later", "ಸಮಯ", "ಬ್ಯುಸಿ", "ನಂತರ", "samaya"],
     "responses": {
       "en": [
         "I completely understand you're busy! Our partner dashboard is fully automated so it takes zero time to manage clients. Can we schedule a 5-minute call later?",
@@ -47,6 +63,64 @@
       "hi": [
         "मैं समझता हूँ कि आप व्यस्त हैं! हमारा पार्टनर डैशबोर्ड पूरी तरह से स्वचालित है, इसलिए इसमें कोई समय नहीं लगता। क्या हम बाद में 5 मिनट बात कर सकते हैं?",
         "कोई बात नहीं! चूंकि सब कुछ डिजिटल है, इसमें आपका बहुत कम समय लगता है। जब आप स्वतंत्र हों तो बताएं।"
+      ],
+      "kn": [
+        "ನೀವು ಬ್ಯುಸಿ ಇದ್ದೀರಿ ಎಂದು ನನಗೆ ಚೆನ್ನಾಗಿ ಅರ್ಥವಾಗುತ್ತದೆ! ನಮ್ಮ ಪಾರ್ಟ್ನರ್ ಡ್ಯಾಶ್‌ಬೋರ್ಡ್ ಸಂಪೂರ್ಣ ಆಟೋಮೇಟೆಡ್ ಆಗಿದೆ, ಯಾವುದೇ ಸಮಯ ಬೇಕಾಗುವುದಿಲ್ಲ. ನಂತರ 5 ನಿಮಿಷ ಮಾತನಾಡೋಣವೇ?",
+        "ಚಿಂತೆ ಬೇಡ! ಎಲ್ಲವೂ ಡಿಜಿಟಲ್ ಆಗಿರುವುದರಿಂದ ನಿಮ್ಮ ಸಮಯ ತುಂಬಾ ಕಡಿಮೆ ಬೇಕಾಗುತ್ತದೆ. ನೀವು ಫ್ರೀ ಇದ್ದಾಗ ಹೇಳಿ."
+      ],
+      "kn-en": [
+        "Neev busy iddira anta naanige arthaaguttade! Namma dashboard fully automated aagide, time enu beku agalla. Nantara 5 nimisha maatnadona?",
+        "Chinte beda! Ellavu digital aagirodu rinda nimma time tumba kadime beku. Free iddaaga heli."
+      ]
+    }
+  },
+  "trust_issues": {
+    "keywords": ["trust", "scam", "fraud", "bharosa", "pakka", "real", "ನಂಬಿಕೆ", "ಮೋಸ", "nambike"],
+    "responses": {
+      "en": [
+        "Rupeezy is a SEBI-registered broker with thousands of active partners. We offer complete transparency through the RISE Portal. Would you like to see testimonials from existing partners?",
+        "That's a valid concern. Rupeezy is fully regulated, and you can verify our credentials on the SEBI website. Our partners get daily payouts — no delays, no hidden fees."
+      ],
+      "hi-en": [
+        "Rupeezy SEBI-registered broker hai aur hazaaron active partners hain. RISE Portal se full transparency milti hai. Kya aap existing partners ke reviews dekhna chahenge?",
+        "Yeh sahi sawaal hai. Rupeezy fully regulated hai, SEBI website pe verify kar sakte ho. Hamare partners ko daily payouts milte hain — koi delay nahi."
+      ],
+      "hi": [
+        "रुपीज़ी एक SEBI-पंजीकृत ब्रोकर है जिसके हजारों सक्रिय भागीदार हैं। RISE पोर्टल के माध्यम से पूरी पारदर्शिता मिलती है। क्या आप मौजूदा पार्टनर्स की समीक्षाएं देखना चाहेंगे?",
+        "यह सही सवाल है। रुपीज़ी पूरी तरह से विनियमित है, और आप SEBI वेबसाइट पर हमारे क्रेडेंशियल्स सत्यापित कर सकते हैं।"
+      ],
+      "kn": [
+        "Rupeezy ಒಂದು SEBI-ನೋಂದಾಯಿತ ಬ್ರೋಕರ್ ಆಗಿದ್ದು, ಸಾವಿರಾರು ಸಕ್ರಿಯ ಪಾರ್ಟ್ನರ್ಸ್ ಇದ್ದಾರೆ. RISE ಪೋರ್ಟಲ್ ಮೂಲಕ ಸಂಪೂರ್ಣ ಪಾರದರ್ಶಕತೆ ಸಿಗುತ್ತದೆ. ಈಗಿರುವ ಪಾರ್ಟ್ನರ್ಸ್ ಅನುಭವಗಳನ್ನು ನೋಡಬೇಕಾ?",
+        "ಇದು ಸರಿಯಾದ ಪ್ರಶ್ನೆ. Rupeezy ಸಂಪೂರ್ಣವಾಗಿ ನಿಯಂತ್ರಿತವಾಗಿದೆ. SEBI ವೆಬ್‌ಸೈಟ್‌ನಲ್ಲಿ ನೀವು ಪರಿಶೀಲಿಸಬಹುದು. ನಮ್ಮ ಪಾರ್ಟ್ನರ್ಸ್ ಗೆ ದಿನನಿತ್ಯ ಪಾವತಿ ಸಿಗುತ್ತದೆ."
+      ],
+      "kn-en": [
+        "Rupeezy SEBI-registered broker aagiddu, saaviraru active partners iddaare. RISE Portal inda full transparency siguttade. Existing partners reviews nodbeeka?",
+        "Idu correct question. Rupeezy fully regulated aagide, SEBI website alli verify maadbahudu. Namma partners ge daily payouts siguttade — yavude delay illa."
+      ]
+    }
+  },
+  "think_about_it": {
+    "keywords": ["think", "later", "consider", "sochta", "baad mein", "ಯೋಚಿಸು", "ನಂತರ", "yochisi", "nantara"],
+    "responses": {
+      "en": [
+        "Of course, take your time! Just remember — zero joining fee, 100% brokerage share, and daily payouts. I'll send you a WhatsApp link so you can sign up whenever you're ready.",
+        "No pressure at all. Can I send you a quick summary on WhatsApp so you have all the details when you're ready to decide?"
+      ],
+      "hi-en": [
+        "Bilkul, apna time lein! Bas yaad rakhein — zero joining fee, 100% brokerage share, aur daily payouts. WhatsApp pe link bhej deta hoon, jab ready ho tab sign up karein.",
+        "Koi pressure nahi. Kya main aapko WhatsApp pe summary bhej sakta hoon taaki jab decide karein tab sab details ho?"
+      ],
+      "hi": [
+        "बिल्कुल, अपना समय लें! बस याद रखें — शून्य जॉइनिंग फीस, 100% ब्रोकरेज शेयर, और दैनिक भुगतान। मैं WhatsApp पर लिंक भेज देता हूँ।",
+        "कोई दबाव नहीं। क्या मैं WhatsApp पर सारांश भेज सकता हूँ ताकि जब आप निर्णय लें तब सभी विवरण हों?"
+      ],
+      "kn": [
+        "ಖಂಡಿತ, ನಿಮ್ಮ ಸಮಯ ತೆಗೆದುಕೊಳ್ಳಿ! ನೆನಪಿಡಿ — ಜೀರೋ ಜಾಯಿನಿಂಗ್ ಫೀ, 100% ಬ್ರೋಕರೇಜ್ ಶೇರ್, ಮತ್ತು ಪ್ರತಿದಿನ ಪಾವತಿ. ನಾನು WhatsApp ನಲ್ಲಿ ಲಿಂಕ್ ಕಳುಹಿಸುತ್ತೇನೆ, ನೀವು ರೆಡಿ ಇದ್ದಾಗ ಸೈನ್ ಅಪ್ ಮಾಡಿ.",
+        "ಯಾವುದೇ ಒತ್ತಡ ಇಲ್ಲ. ನಾನು WhatsApp ನಲ್ಲಿ ಸಂಕ್ಷಿಪ್ತ ಮಾಹಿತಿ ಕಳುಹಿಸಲೇ? ನೀವು ನಿರ್ಧರಿಸಲು ಬಯಸಿದಾಗ ಎಲ್ಲಾ ವಿವರಗಳು ನಿಮ್ಮ ಹತ್ತಿರ ಇರುತ್ತವೆ."
+      ],
+      "kn-en": [
+        "Kandita, nimma time tegedukolli! Nenapidli — zero joining fee, 100% brokerage share, mattu daily payouts. Naanu WhatsApp alli link kaluhisuttene, ready iddaaga sign up maadi.",
+        "Yavude pressure illa. Naanu WhatsApp alli quick summary kaluhisla? Neevu decide maadbekandaaga ella details nimma hattira irutte."
       ]
     }
   }

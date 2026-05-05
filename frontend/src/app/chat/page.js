@@ -18,6 +18,20 @@ export default function ChatPage() {
   const [availableVoices, setAvailableVoices] = useState([]);
   const [showSettings, setShowSettings] = useState(false);
   
+  // STT Language Selection
+  const [sttLanguage, setSttLanguage] = useState('en-IN');
+  const sttLanguageOptions = [
+    { code: 'en-IN', label: 'English (IN)' },
+    { code: 'hi-IN', label: 'Hindi' },
+    { code: 'hi-IN', label: 'Hinglish' }, // Using hi-IN for Hinglish speech recognition as well
+    { code: 'kn-IN', label: 'Kannada (ಕನ್ನಡ)' },
+    { code: 'ta-IN', label: 'Tamil' },
+    { code: 'te-IN', label: 'Telugu' },
+    { code: 'mr-IN', label: 'Marathi' },
+    { code: 'gu-IN', label: 'Gujarati' },
+    { code: 'bn-IN', label: 'Bengali' },
+  ];
+  
   // Emotion Radar State
   const [emotion, setEmotion] = useState({ scores: { excited: 10, curious: 10, skeptical: 10, frustrated: 10, neutral: 40 }, dominant: 'neutral' });
   
@@ -57,6 +71,25 @@ export default function ChatPage() {
 
   // Handle Speech Synthesis (TTS)
   const speakResponse = (text) => {
+    // Auto-detect language from response text for proper TTS
+    const hasKannada = /[\u0C80-\u0CFF]/.test(text);
+    const hasHindi = /[\u0900-\u097F]/.test(text);
+    
+    // Windows/Browsers often lack native Kannada/Hindi voices.
+    // Use Google Translate's unofficial TTS endpoint for perfect local language pronunciation.
+    if (hasKannada) {
+      const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=kn&client=tw-ob`);
+      audio.playbackRate = speechRate;
+      audio.play().catch(e => console.error("TTS Audio Play failed", e));
+      return;
+    } else if (hasHindi) {
+      const audio = new Audio(`https://translate.google.com/translate_tts?ie=UTF-8&q=${encodeURIComponent(text)}&tl=hi&client=tw-ob`);
+      audio.playbackRate = speechRate;
+      audio.play().catch(e => console.error("TTS Audio Play failed", e));
+      return;
+    }
+
+    // Fallback to Web Speech API for English
     if ('speechSynthesis' in window) {
       window.speechSynthesis.cancel();
       const utterance = new SpeechSynthesisUtterance(text);
@@ -87,7 +120,7 @@ export default function ChatPage() {
     }
 
     const recognition = new SpeechRecognition();
-    recognition.lang = 'en-IN'; 
+    recognition.lang = sttLanguage;
     recognition.interimResults = false;
     recognition.maxAlternatives = 1;
 
@@ -312,6 +345,19 @@ export default function ChatPage() {
                 />
               </div>
               
+              <div>
+                <label className="block text-[10px] uppercase tracking-wider text-gray-700 mb-2 font-semibold">STT_Language</label>
+                <select 
+                  className="w-full bg-white border border-gray-300 rounded-lg p-2.5 text-xs text-gray-900 outline-none focus:border-primary-500 focus:ring-2 focus:ring-primary-500/20 shadow-sm"
+                  value={sttLanguage}
+                  onChange={(e) => setSttLanguage(e.target.value)}
+                >
+                  {sttLanguageOptions.map((opt) => (
+                    <option key={opt.label} value={opt.code}>{opt.label}</option>
+                  ))}
+                </select>
+              </div>
+
               <div className="pt-3">
                 <button 
                   onClick={() => speakResponse("System audio sequence initiated. All modules nominal.")}
@@ -472,6 +518,18 @@ export default function ChatPage() {
               disabled={isLoading}
             />
             
+            {/* Language selector pill next to mic */}
+            <select
+              className="absolute right-28 bg-white/90 border border-primary-300/50 rounded-full px-2 py-1.5 text-[10px] font-mono text-gray-700 outline-none focus:ring-2 focus:ring-primary-500/20 cursor-pointer shadow-sm"
+              value={sttLanguage}
+              onChange={(e) => setSttLanguage(e.target.value)}
+              title="Speech Recognition Language"
+            >
+              {sttLanguageOptions.map((opt) => (
+                <option key={opt.label} value={opt.code}>{opt.label}</option>
+              ))}
+            </select>
+
             <button
               type="button"
               onClick={toggleListening}
