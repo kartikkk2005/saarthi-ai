@@ -14,7 +14,7 @@ export default function DashboardPage() {
 
   const fetchLeads = async () => {
     try {
-      const res = await fetch('http://localhost:8080/leads');
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/leads`);
       if (res.ok) {
         const data = await res.json();
         setLeads(data);
@@ -34,7 +34,7 @@ export default function DashboardPage() {
     setRoutingResult(null);
     setSummaryResult(null);
     try {
-      const res = await fetch(`http://localhost:8080/leads/${sessionId}`);
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/leads/${sessionId}`);
       if (res.ok) setSelectedLead(await res.json());
     } catch (e) {
       console.error(e);
@@ -44,7 +44,7 @@ export default function DashboardPage() {
   const handleRouteLead = async () => {
     if (!selectedLead) return;
     try {
-      const res = await fetch(`http://localhost:8080/leads/${selectedLead.session_id}/route`, { method: 'POST' });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/leads/${selectedLead.session_id}/route`, { method: 'POST' });
       if (res.ok) {
         setRoutingResult(await res.json());
       }
@@ -57,7 +57,7 @@ export default function DashboardPage() {
     if (!selectedLead) return;
     setIsGeneratingSummary(true);
     try {
-      const res = await fetch(`http://localhost:8080/leads/${selectedLead.session_id}/summary`, { method: 'POST' });
+      const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8080'}/leads/${selectedLead.session_id}/summary`, { method: 'POST' });
       if (res.ok) {
         setSummaryResult(await res.json());
       }

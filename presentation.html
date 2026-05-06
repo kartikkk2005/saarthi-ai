@@ -1,0 +1,321 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1.0">
+<title>Saarthi.AI — Pitch Deck</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Inter',sans-serif;background:#0a0a0a;color:#fff;overflow:hidden;height:100vh}
+.deck{display:flex;transition:transform .6s cubic-bezier(.4,0,.2,1);height:100vh}
+.slide{min-width:100vw;height:100vh;padding:60px 80px;display:flex;flex-direction:column;justify-content:center;position:relative;overflow:hidden}
+.slide::before{content:'';position:absolute;top:-50%;right:-30%;width:600px;height:600px;background:radial-gradient(circle,rgba(99,102,241,.15),transparent 70%);border-radius:50%;pointer-events:none}
+.slide-num{position:absolute;top:30px;right:40px;font-size:14px;opacity:.4;font-weight:600}
+.logo{position:absolute;top:30px;left:40px;font-size:18px;font-weight:700;color:#818cf8}
+h1{font-size:56px;font-weight:900;line-height:1.1;margin-bottom:24px;background:linear-gradient(135deg,#818cf8,#c084fc);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+h2{font-size:42px;font-weight:800;margin-bottom:20px;color:#e0e7ff}
+h3{font-size:22px;color:#818cf8;margin-bottom:16px;font-weight:600}
+p,.desc{font-size:20px;line-height:1.7;color:#a5b4fc;max-width:900px}
+.subtitle{font-size:24px;color:#94a3b8;margin-bottom:32px}
+.tag{display:inline-block;padding:6px 16px;border-radius:20px;font-size:13px;font-weight:600;margin:4px}
+.tag-hot{background:rgba(239,68,68,.2);color:#fca5a5;border:1px solid rgba(239,68,68,.3)}
+.tag-warm{background:rgba(251,146,60,.2);color:#fdba74;border:1px solid rgba(251,146,60,.3)}
+.tag-cold{background:rgba(96,165,250,.2);color:#93c5fd;border:1px solid rgba(96,165,250,.3)}
+.tag-purple{background:rgba(139,92,246,.2);color:#c4b5fd;border:1px solid rgba(139,92,246,.3)}
+.grid2{display:grid;grid-template-columns:1fr 1fr;gap:32px;margin-top:20px}
+.grid3{display:grid;grid-template-columns:1fr 1fr 1fr;gap:24px;margin-top:20px}
+.card{background:rgba(255,255,255,.05);border:1px solid rgba(255,255,255,.1);border-radius:16px;padding:28px}
+.card h3{margin-bottom:10px}
+.card p{font-size:16px;color:#94a3b8}
+table{width:100%;border-collapse:collapse;margin-top:16px;font-size:17px}
+th{text-align:left;padding:12px 16px;background:rgba(129,140,248,.15);color:#c4b5fd;font-weight:600;border-bottom:2px solid rgba(129,140,248,.3)}
+td{padding:12px 16px;border-bottom:1px solid rgba(255,255,255,.06);color:#cbd5e1}
+tr:hover td{background:rgba(255,255,255,.03)}
+.stat-box{text-align:center;padding:24px}
+.stat-box .num{font-size:56px;font-weight:900;background:linear-gradient(135deg,#818cf8,#f472b6);-webkit-background-clip:text;-webkit-text-fill-color:transparent}
+.stat-box .label{font-size:14px;color:#94a3b8;margin-top:4px}
+.flow{display:flex;align-items:center;gap:12px;margin:20px 0;flex-wrap:wrap}
+.flow-step{background:rgba(129,140,248,.15);border:1px solid rgba(129,140,248,.3);padding:14px 22px;border-radius:12px;font-size:15px;font-weight:600;color:#c4b5fd}
+.flow-arrow{color:#4f46e5;font-size:24px}
+ul{list-style:none;margin-top:12px}
+ul li{padding:8px 0;font-size:18px;color:#cbd5e1;position:relative;padding-left:28px}
+ul li::before{content:'▸';position:absolute;left:0;color:#818cf8;font-weight:bold}
+.highlight{background:rgba(239,68,68,.15);border:1px solid rgba(239,68,68,.3);border-radius:12px;padding:20px 28px;margin:20px 0;font-size:22px;color:#fca5a5;font-weight:600}
+.controls{position:fixed;bottom:30px;right:40px;display:flex;gap:12px;z-index:100}
+.controls button{width:48px;height:48px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;font-size:20px;cursor:pointer;backdrop-filter:blur(10px);transition:all .2s}
+.controls button:hover{background:rgba(129,140,248,.3);border-color:#818cf8}
+.progress{position:fixed;top:0;left:0;height:3px;background:linear-gradient(90deg,#818cf8,#c084fc);transition:width .4s;z-index:100}
+.center-slide{text-align:center;align-items:center}
+.team{font-size:18px;color:#64748b;margin-top:16px}
+.emoji{font-size:36px;margin-bottom:12px;display:block}
+.pipeline-step{display:flex;align-items:center;gap:16px;padding:10px 0;border-bottom:1px solid rgba(255,255,255,.05)}
+.step-num{width:32px;height:32px;border-radius:50%;background:rgba(129,140,248,.2);display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#818cf8;flex-shrink:0}
+.step-text{font-size:16px;color:#cbd5e1}
+.step-text strong{color:#e0e7ff}
+</style>
+</head>
+<body>
+
+<div class="progress" id="progress"></div>
+<div class="deck" id="deck">
+
+<!-- SLIDE 1: Title -->
+<div class="slide center-slide" style="background:linear-gradient(135deg,#0a0a1a,#1a1033)">
+<div class="slide-num">01 / 14</div>
+<p style="font-size:14px;letter-spacing:4px;color:#818cf8;margin-bottom:20px">RUPEEZY HACKATHON 2026</p>
+<h1 style="font-size:72px">Saarthi.AI</h1>
+<p class="subtitle">Multilingual Partner Acquisition Engine</p>
+<p style="font-size:20px;color:#64748b;font-style:italic">"Qualifying leads at the speed of conversation."</p>
+<p class="team">Kartik D Chendekar · Abhilash Tiwari · Kaushal Prakash</p>
+</div>
+
+<!-- SLIDE 2: Problem -->
+<div class="slide">
+<div class="logo">Saarthi.AI</div><div class="slide-num">02 / 14</div>
+<h2>The Problem</h2>
+<p>Rupeezy needs to onboard Authorized Persons (APs) at scale. Human RMs can't keep up.</p>
+<div class="grid3" style="margin-top:32px">
+<div class="stat-box card"><div class="num">18%</div><div class="label">Lead Conversion Rate</div></div>
+<div class="stat-box card"><div class="num">~20</div><div class="label">Calls/Day per RM</div></div>
+<div class="stat-box card"><div class="num">82%</div><div class="label">Leads Lost Before Contact</div></div>
+</div>
+<div class="grid2" style="margin-top:24px">
+<div class="card"><span class="emoji">⏳</span><h3>Queue Bottleneck</h3><p>RMs can only handle 20 calls/day. Leads go cold waiting.</p></div>
+<div class="card"><span class="emoji">🌐</span><h3>Language Barriers</h3><p>Leads speak Hindi, Hinglish, Kannada — RMs speak 1-2 languages.</p></div>
+</div>
+</div>
+
+<!-- SLIDE 3: Solution -->
+<div class="slide">
+<div class="logo">Saarthi.AI</div><div class="slide-num">03 / 14</div>
+<h2>Our Solution</h2>
+<p style="margin-bottom:24px">An AI-first conversational agent that replaces the RM bottleneck.</p>
+<div class="flow">
+<div class="flow-step">📥 Lead Arrives</div><span class="flow-arrow">→</span>
+<div class="flow-step">🤖 Saarthi.AI Converses</div><span class="flow-arrow">→</span>
+<div class="flow-step">🎯 Scores & Classifies</div><span class="flow-arrow">→</span>
+<div class="flow-step">📲 Routes to RM / WhatsApp</div>
+</div>
+<ul style="margin-top:28px">
+<li><strong>Instant contact</strong> — Zero wait time, 24/7 availability</li>
+<li><strong>Speaks their language</strong> — Auto-detects Hindi, Hinglish, Kannada, English</li>
+<li><strong>Real-time scoring</strong> — Classifies leads as Hot / Warm / Cold</li>
+<li><strong>Handles objections</strong> — Curated KB + Gemini AI for compliance</li>
+<li><strong>Auto-routes</strong> — Hot → RM handoff, Warm → WhatsApp nurture</li>
+</ul>
+</div>
+
+<!-- SLIDE 4: Architecture -->
+<div class="slide">
+<div class="logo">Saarthi.AI</div><div class="slide-num">04 / 14</div>
+<h2>System Architecture</h2>
+<div class="grid2">
+<div>
+<div class="card" style="margin-bottom:16px"><span class="emoji">💻</span><h3>Frontend — Next.js 16</h3><p>Web Speech API (STT/TTS), Glassmorphism UI, Real-time emotion radar, Tailwind CSS</p></div>
+<div class="card"><span class="emoji">🗄️</span><h3>Database — MongoDB</h3><p>Async Motor driver, Session memory persistence, Memory summaries for long chats</p></div>
+</div>
+<div>
+<div class="card" style="margin-bottom:16px"><span class="emoji">⚡</span><h3>Backend — FastAPI</h3><p>Async Python, Language detection, Lead scoring, Emotion analysis, Memory management</p></div>
+<div class="card"><span class="emoji">🧠</span><h3>AI Engine — Gemini 3 Flash</h3><p>Contextual responses, Memory summarization, Post-call analysis, Tone adaptation</p></div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 5: Pipeline -->
+<div class="slide">
+<div class="logo">Saarthi.AI</div><div class="slide-num">05 / 14</div>
+<h2>Processing Pipeline</h2>
+<p style="margin-bottom:20px">What happens when a lead sends a message:</p>
+<div class="pipeline-step"><div class="step-num">1</div><div class="step-text"><strong>session_store.py</strong> → Retrieve or create session from MongoDB</div></div>
+<div class="pipeline-step"><div class="step-num">2</div><div class="step-text"><strong>language.py</strong> → Detect language (Hindi / Hinglish / Kannada / English)</div></div>
+<div class="pipeline-step"><div class="step-num">3</div><div class="step-text"><strong>lead_scorer.py</strong> → Calculate score delta (+15 interest / -15 rejection)</div></div>
+<div class="pipeline-step"><div class="step-num">4</div><div class="step-text"><strong>emotion.py</strong> → Analyze 5-axis emotion state</div></div>
+<div class="pipeline-step"><div class="step-num">5</div><div class="step-text"><strong>memory.py</strong> → Build context (full history or summary + recent 20)</div></div>
+<div class="pipeline-step"><div class="step-num">6</div><div class="step-text"><strong>objection_handler.py</strong> → Check KB for deterministic response</div></div>
+<div class="pipeline-step"><div class="step-num">7</div><div class="step-text"><strong>llm.py</strong> → Generate Gemini response with memory + tone</div></div>
+<div class="pipeline-step"><div class="step-num">8</div><div class="step-text"><strong>session_store.py</strong> → Save response + score to MongoDB</div></div>
+</div>
+
+<!-- SLIDE 6: Multilingual -->
+<div class="slide">
+<div class="logo">Saarthi.AI</div><div class="slide-num">06 / 14</div>
+<h2>Multilingual Intelligence</h2>
+<p style="margin-bottom:16px">The AI mirrors the user's exact language and tone.</p>
+<table>
+<tr><th>Language</th><th>Detection</th><th>Example</th></tr>
+<tr><td><span class="tag tag-purple">Hindi</span></td><td>Devanagari Unicode</td><td>"मुझे जानकारी चाहिए" → Full Hindi reply</td></tr>
+<tr><td><span class="tag tag-purple">Hinglish</span></td><td>Keyword matching</td><td>"mera broker better hai" → Mixed response</td></tr>
+<tr><td><span class="tag tag-purple">Kannada</span></td><td>Kannada Unicode</td><td>"ನನಗೆ ಆಸಕ್ತಿ ಇದೆ" → Full Kannada reply</td></tr>
+<tr><td><span class="tag tag-purple">Kanglish</span></td><td>Keyword matching</td><td>"naanu interested, heli" → Romanized Kannada</td></tr>
+<tr><td><span class="tag tag-purple">English</span></td><td>Default fallback</td><td>"Tell me about commission" → English reply</td></tr>
+</table>
+</div>
+
+<!-- SLIDE 7: Lead Scoring -->
+<div class="slide">
+<div class="logo">Saarthi.AI</div><div class="slide-num">07 / 14</div>
+<h2>Lead Qualification Engine</h2>
+<div class="grid2">
+<div>
+<h3>Scoring Logic</h3>
+<ul>
+<li>🟢 <strong>+15 pts</strong> — "interested", "join", "haan", "houdu"</li>
+<li>🔴 <strong>-15 pts</strong> — "no", "busy", "nahi", "beda"</li>
+<li>🟡 <strong>+5 pts</strong> — Neutral engagement (still talking)</li>
+</ul>
+<h3 style="margin-top:24px">Classification</h3>
+<table>
+<tr><td><span class="tag tag-hot">🔥 Hot ≥75</span></td><td>Immediate RM handoff</td></tr>
+<tr><td><span class="tag tag-warm">🟧 Warm 40-74</span></td><td>WhatsApp nurture</td></tr>
+<tr><td><span class="tag tag-cold">🧊 Cold &lt;40</span></td><td>Log & follow up later</td></tr>
+</table>
+</div>
+<div class="card" style="display:flex;flex-direction:column;justify-content:center;align-items:center">
+<div style="width:200px;height:200px;border-radius:50%;background:conic-gradient(#ef4444 0% 25%,#f97316 25% 50%,#3b82f6 50% 100%);display:flex;align-items:center;justify-content:center">
+<div style="width:140px;height:140px;border-radius:50%;background:#1a1a2e;display:flex;align-items:center;justify-content:center;flex-direction:column">
+<div style="font-size:36px;font-weight:900;color:#818cf8">75</div>
+<div style="font-size:12px;color:#94a3b8">SCORE</div>
+</div>
+</div>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 8: Anti-Hallucination -->
+<div class="slide">
+<div class="logo">Saarthi.AI</div><div class="slide-num">08 / 14</div>
+<h2>3-Layer Anti-Hallucination</h2>
+<p style="margin-bottom:20px">In financial services, AI making up facts = legal liability.</p>
+<div class="grid3">
+<div class="card"><span class="emoji">📋</span><h3>Layer 1: KB Override</h3><p>5 objection categories with multilingual responses. Fires BEFORE the LLM — 100% compliant.</p></div>
+<div class="card"><span class="emoji">🛡️</span><h3>Layer 2: Guardrails</h3><p>System prompt forbids false commissions, investment advice, and deal closing.</p></div>
+<div class="card"><span class="emoji">🤝</span><h3>Layer 3: RM Handoff</h3><p>AI never closes deals. Score > 60 triggers automatic RM handover.</p></div>
+</div>
+<div class="highlight" style="margin-top:28px">
+💬 User: "mera broker better hai"<br>
+🤖 AI: "Aapka already broker hai, samajh sakta hoon. Par Rupeezy mein brokerage sharing zyada milti hai. Compare karke dekhein?"
+</div>
+</div>
+
+<!-- SLIDE 9: Emotion Radar -->
+<div class="slide">
+<div class="logo">Saarthi.AI</div><div class="slide-num">09 / 14</div>
+<h2>🎭 Live Emotion Radar</h2>
+<p style="margin-bottom:8px">Our unique differentiator — no other sales AI does this.</p>
+<div class="grid2">
+<div>
+<table>
+<tr><th>Emotion</th><th>AI Behavior</th></tr>
+<tr><td>😄 Excited</td><td>Upbeat, move towards closing</td></tr>
+<tr><td>🤔 Curious</td><td>Informative, give clear facts</td></tr>
+<tr><td>🧐 Skeptical</td><td>Empathetic, provide proof</td></tr>
+<tr><td>😤 Frustrated</td><td>Soften tone, stop pushing</td></tr>
+<tr><td>😐 Neutral</td><td>Warm and professional</td></tr>
+</table>
+</div>
+<div class="card" style="display:flex;align-items:center;justify-content:center">
+<svg viewBox="0 0 200 200" width="250">
+<polygon points="100,30 170,75 155,150 45,150 30,75" fill="none" stroke="rgba(129,140,248,.3)" stroke-width="1"/>
+<polygon points="100,53 147,83 137,133 63,133 53,83" fill="none" stroke="rgba(129,140,248,.2)" stroke-width="1"/>
+<polygon points="100,76 124,91 119,116 81,116 76,91" fill="none" stroke="rgba(129,140,248,.1)" stroke-width="1"/>
+<polygon points="100,40 155,80 120,145 55,130 50,75" fill="rgba(129,140,248,.25)" stroke="#818cf8" stroke-width="2"/>
+<text x="100" y="22" text-anchor="middle" fill="#c4b5fd" font-size="10" font-weight="bold">EXCITED</text>
+<text x="178" y="78" text-anchor="start" fill="#c4b5fd" font-size="10" font-weight="bold">CURIOUS</text>
+<text x="162" y="158" text-anchor="start" fill="#c4b5fd" font-size="10" font-weight="bold">NEUTRAL</text>
+<text x="38" y="158" text-anchor="end" fill="#c4b5fd" font-size="10" font-weight="bold">SKEPTICAL</text>
+<text x="22" y="78" text-anchor="end" fill="#c4b5fd" font-size="10" font-weight="bold">FRUSTRATED</text>
+</svg>
+</div>
+</div>
+</div>
+
+<!-- SLIDE 10: Memory -->
+<div class="slide">
+<div class="logo">Saarthi.AI</div><div class="slide-num">10 / 14</div>
+<h2>Conversation Memory</h2>
+<p style="margin-bottom:20px">The AI never forgets what the user said earlier.</p>
+<table>
+<tr><th>Length</th><th>Strategy</th><th>What Happens</th></tr>
+<tr><td>≤ 20 msgs</td><td><span class="tag tag-purple">Full Context</span></td><td>All messages sent directly to Gemini</td></tr>
+<tr><td>> 20 msgs</td><td><span class="tag tag-warm">Summary + Recent</span></td><td>Older messages compressed; last 20 as full context</td></tr>
+<tr><td>> 25 msgs</td><td><span class="tag tag-hot">Auto Re-summarize</span></td><td>Memory refreshed every 10 messages</td></tr>
+</table>
+<div class="grid2" style="margin-top:24px">
+<div class="card"><h3>What Gets Remembered</h3><p>Name, location, company, role, preferences, budget, objections, decisions, questions asked</p></div>
+<div class="card"><h3>Persistent Memory</h3><p>Stored in MongoDB. User can drop off and return later — context survives across sessions.</p></div>
+</div>
+</div>
+
+<!-- SLIDE 11: Dashboard -->
+<div class="slide">
+<div class="logo">Saarthi.AI</div><div class="slide-num">11 / 14</div>
+<h2>📊 RM Command Center</h2>
+<div class="grid2">
+<div class="card"><span class="emoji">📈</span><h3>Funnel Analytics</h3><p>Live count of Total, Hot, Warm, Cold leads with real-time updates.</p></div>
+<div class="card"><span class="emoji">🧠</span><h3>AI Post-Call Summaries</h3><p>One-click Gemini summary: Objections, Topics, Recommended Action.</p></div>
+<div class="card"><span class="emoji">🏷️</span><h3>Sentiment Badges</h3><p>Each message tagged "High Intent" or "Objection" for instant RM skimming.</p></div>
+<div class="card"><span class="emoji">📤</span><h3>CRM Export</h3><p>Download full lead report as .txt. Simulate WhatsApp routing for Warm leads.</p></div>
+</div>
+</div>
+
+<!-- SLIDE 12: Tech Stack -->
+<div class="slide">
+<div class="logo">Saarthi.AI</div><div class="slide-num">12 / 14</div>
+<h2>Tech Stack</h2>
+<table>
+<tr><th>Layer</th><th>Technology</th><th>Why</th></tr>
+<tr><td>AI Engine</td><td>Gemini 3 Flash Preview</td><td>Fast, multilingual, cost-effective</td></tr>
+<tr><td>Backend</td><td>FastAPI + Python (async)</td><td>Concurrent lead handling</td></tr>
+<tr><td>Frontend</td><td>Next.js 16 + Tailwind</td><td>Premium UI, Turbopack speed</td></tr>
+<tr><td>Database</td><td>MongoDB (Motor async)</td><td>Flexible documents, async I/O</td></tr>
+<tr><td>Voice</td><td>Web Speech API</td><td>Zero-cost, browser-native</td></tr>
+<tr><td>Orchestration</td><td>concurrently</td><td>Single npm run dev</td></tr>
+</table>
+</div>
+
+<!-- SLIDE 13: Impact -->
+<div class="slide">
+<div class="logo">Saarthi.AI</div><div class="slide-num">13 / 14</div>
+<h2>Impact & Scalability</h2>
+<table>
+<tr><th>Metric</th><th>Before (Human RM)</th><th>After (Saarthi.AI)</th></tr>
+<tr><td>Leads contacted/day</td><td>~20</td><td style="color:#34d399;font-weight:700">Unlimited</td></tr>
+<tr><td>Response time</td><td>Hours/Days</td><td style="color:#34d399;font-weight:700">&lt; 2 seconds</td></tr>
+<tr><td>Languages</td><td>1-2</td><td style="color:#34d399;font-weight:700">5+ (auto-detect)</td></tr>
+<tr><td>Lead qualification</td><td>Gut feel</td><td style="color:#34d399;font-weight:700">Data-driven scoring</td></tr>
+<tr><td>Cost per contact</td><td>₹50-100</td><td style="color:#34d399;font-weight:700">&lt; ₹1</td></tr>
+<tr><td>RM time on cold leads</td><td>60% wasted</td><td style="color:#34d399;font-weight:700">0% (pre-filtered)</td></tr>
+</table>
+<div class="highlight" style="margin-top:24px;text-align:center">RMs now spend 100% of their time closing <strong>Hot leads only</strong>.</div>
+</div>
+
+<!-- SLIDE 14: Thank You -->
+<div class="slide center-slide" style="background:linear-gradient(135deg,#0a0a1a,#1a1033)">
+<div class="slide-num">14 / 14</div>
+<h1 style="font-size:64px">Thank You!</h1>
+<p class="subtitle" style="font-style:italic">"Let AI qualify. Let humans close."</p>
+<p style="color:#64748b;font-size:16px;margin-top:32px">Kartik D Chendekar · Abhilash Tiwari · Kaushal Prakash</p>
+<p style="color:#818cf8;font-size:14px;margin-top:12px">Built with ❤️ for the Rupeezy Hackathon</p>
+</div>
+
+</div>
+
+<div class="controls">
+<button onclick="prev()" id="prevBtn">←</button>
+<button onclick="next()" id="nextBtn">→</button>
+</div>
+
+<script>
+let current=0;
+const deck=document.getElementById('deck');
+const total=deck.children.length;
+const prog=document.getElementById('progress');
+function go(n){current=Math.max(0,Math.min(total-1,n));deck.style.transform=`translateX(-${current*100}vw)`;prog.style.width=((current+1)/total*100)+'%'}
+function next(){go(current+1)}
+function prev(){go(current-1)}
+document.addEventListener('keydown',e=>{if(e.key==='ArrowRight'||e.key===' ')next();if(e.key==='ArrowLeft')prev()});
+go(0);
+</script>
+</body>
+</html>
